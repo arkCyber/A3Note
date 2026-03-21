@@ -1,0 +1,22 @@
+{
+  "title": "Files",
+  "refresh": "Refresh",
+  "delete": "Delete",
+  "noFiles": "No files yet. Create your first note!",
+  "file": "File",
+  "folder": "Folder",
+  "contextMenu": {
+    "open": "Open",
+    "rename": "Rename",
+    "delete": "Delete",
+    "copyPath": "Copy Path",
+    "newFile": "New File",
+    "newFolder": "New Folder"
+  },
+  "prompts": {
+    "enterFileName": "Enter file name:",
+    "enterFolderName": "Enter folder name:",
+    "enterNewName": "Enter new name:",
+    "confirmDelete": "Are you sure you want to delete this file?"
+  }
+}

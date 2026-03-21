@@ -1,0 +1,19 @@
+{
+  "placeholder": "コマンドを検索...",
+  "noResults": "コマンドが見つかりません",
+  "commands": {
+    "newFile": "新しいファイル",
+    "saveFile": "ファイルを保存",
+    "openWorkspace": "ワークスペースを開く",
+    "toggleSidebar": "サイドバーを切り替え",
+    "toggleSearch": "検索を切り替え",
+    "togglePreview": "プレビューを切り替え"
+  },
+  "shortcuts": {
+    "cmdN": "⌘+N",
+    "cmdS": "⌘+S",
+    "cmdB": "⌘+B",
+    "cmdShiftF": "⌘+Shift+F",
+    "cmdE": "⌘+E"
+  }
+}

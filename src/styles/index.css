@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Default theme (Dark - Warm) */
+:root,
+:root[data-theme="dark"] {
+  /* Warm dark theme - default */
+  --background: #1a1614;        /* Warm dark background */
+  --foreground: #e8d5c4;         /* Warm light text */
+  --primary: #d4a574;            /* Warm gold accent */
+  --secondary: #0f0d0c;          /* Darker warm background */
+  --accent: #e8a87c;             /* Warm orange accent */
+  --border: #3a3330;             /* Warm border */
+  --muted: #a89984;              /* Warm muted text */
+  --success: #b8bb26;            /* Warm green */
+  --warning: #fabd2f;            /* Warm yellow */
+  --error: #fb4934;              /* Warm red */
+}
+
+/* Light theme */
+:root[data-theme="light"] {
+  --background: #fbf1c7;         /* Warm light background */
+  --foreground: #3c3836;         /* Dark text */
+  --primary: #af3a03;            /* Warm brown accent */
+  --secondary: #f2e5bc;          /* Light secondary */
+  --accent: #d65d0e;             /* Warm orange accent */
+  --border: #d5c4a1;             /* Light border */
+  --muted: #7c6f64;              /* Muted text */
+  --success: #79740e;            /* Green */
+  --warning: #b57614;            /* Yellow */
+  --error: #cc241d;              /* Red */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background);
+  color: var(--foreground);
+  overflow: hidden;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* CodeMirror theme customization */
+.cm-editor {
+  height: 100%;
+  font-size: 14px;
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+.cm-scroller {
+  overflow: auto;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.cm-content {
+  padding: 20px;
+}
+
+.cm-line {
+  padding: 2px 0;
+}

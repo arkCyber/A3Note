@@ -1,0 +1,19 @@
+{
+  "placeholder": "Search commands...",
+  "noResults": "No commands found",
+  "commands": {
+    "newFile": "New File",
+    "saveFile": "Save File",
+    "openWorkspace": "Open Workspace",
+    "toggleSidebar": "Toggle Sidebar",
+    "toggleSearch": "Toggle Search",
+    "togglePreview": "Toggle Preview"
+  },
+  "shortcuts": {
+    "cmdN": "⌘+N",
+    "cmdS": "⌘+S",
+    "cmdB": "⌘+B",
+    "cmdShiftF": "⌘+Shift+F",
+    "cmdE": "⌘+E"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "placeholder": "搜索命令...",
+  "noResults": "未找到命令",
+  "commands": {
+    "newFile": "新建文件",
+    "saveFile": "保存文件",
+    "openWorkspace": "打开工作区",
+    "toggleSidebar": "切换侧边栏",
+    "toggleSearch": "切换搜索",
+    "togglePreview": "切换预览"
+  },
+  "shortcuts": {
+    "cmdN": "⌘+N",
+    "cmdS": "⌘+S",
+    "cmdB": "⌘+B",
+    "cmdShiftF": "⌘+Shift+F",
+    "cmdE": "⌘+E"
+  }
+}

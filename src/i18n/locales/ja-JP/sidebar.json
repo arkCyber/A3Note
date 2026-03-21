@@ -1,0 +1,22 @@
+{
+  "title": "ファイル",
+  "refresh": "更新",
+  "delete": "削除",
+  "noFiles": "ファイルがありません。最初のノートを作成しましょう！",
+  "file": "ファイル",
+  "folder": "フォルダ",
+  "contextMenu": {
+    "open": "開く",
+    "rename": "名前を変更",
+    "delete": "削除",
+    "copyPath": "パスをコピー",
+    "newFile": "新しいファイル",
+    "newFolder": "新しいフォルダ"
+  },
+  "prompts": {
+    "enterFileName": "ファイル名を入力してください：",
+    "enterFolderName": "フォルダ名を入力してください：",
+    "enterNewName": "新しい名前を入力してください：",
+    "confirmDelete": "このファイルを削除してもよろしいですか？"
+  }
+}

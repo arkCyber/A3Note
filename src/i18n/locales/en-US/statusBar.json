@@ -1,0 +1,8 @@
+{
+  "words": "Words",
+  "lines": "Lines",
+  "characters": "Characters",
+  "position": "Ln {{line}}, Col {{column}}",
+  "language": "Markdown",
+  "noFile": "No file open"
+}

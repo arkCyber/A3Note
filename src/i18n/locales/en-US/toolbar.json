@@ -1,0 +1,15 @@
+{
+  "toggleSidebar": "Toggle sidebar",
+  "openWorkspace": "Open workspace",
+  "newFile": "New file",
+  "newFileShortcut": "New file (⌘+N)",
+  "save": "Save",
+  "saveShortcut": "Save (⌘+S)",
+  "saving": "Saving...",
+  "search": "Search",
+  "searchShortcut": "Search (⌘+Shift+F)",
+  "settings": "Settings",
+  "themeToggle": "Toggle theme",
+  "switchToLight": "Switch to light mode",
+  "switchToDark": "Switch to dark mode"
+}

@@ -1,0 +1,15 @@
+{
+  "toggleSidebar": "切换侧边栏",
+  "openWorkspace": "打开工作区",
+  "newFile": "新建文件",
+  "newFileShortcut": "新建文件 (⌘+N)",
+  "save": "保存",
+  "saveShortcut": "保存 (⌘+S)",
+  "saving": "保存中...",
+  "search": "搜索",
+  "searchShortcut": "搜索 (⌘+Shift+F)",
+  "settings": "设置",
+  "themeToggle": "切换主题",
+  "switchToLight": "切换到亮色模式",
+  "switchToDark": "切换到暗色模式"
+}

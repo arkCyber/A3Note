@@ -1,0 +1,21 @@
+{
+  "errors": {
+    "fileNotFound": "ファイルが見つかりません",
+    "cannotReadFile": "ファイルを読み取れません",
+    "cannotSaveFile": "ファイルを保存できません",
+    "cannotDeleteFile": "ファイルを削除できません",
+    "cannotCreateFile": "ファイルを作成できません",
+    "invalidFileName": "無効なファイル名",
+    "fileAlreadyExists": "ファイルは既に存在します"
+  },
+  "success": {
+    "fileSaved": "ファイルを保存しました",
+    "fileDeleted": "ファイルを削除しました",
+    "fileCreated": "ファイルを作成しました",
+    "fileRenamed": "ファイル名を変更しました"
+  },
+  "confirmations": {
+    "deleteFile": "「{{fileName}}」を削除してもよろしいですか？",
+    "unsavedChanges": "保存されていない変更があります。保存しますか？"
+  }
+}

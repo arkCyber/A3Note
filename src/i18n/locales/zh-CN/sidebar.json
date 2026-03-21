@@ -1,0 +1,22 @@
+{
+  "title": "文件",
+  "refresh": "刷新",
+  "delete": "删除",
+  "noFiles": "暂无文件。创建您的第一个笔记！",
+  "file": "文件",
+  "folder": "文件夹",
+  "contextMenu": {
+    "open": "打开",
+    "rename": "重命名",
+    "delete": "删除",
+    "copyPath": "复制路径",
+    "newFile": "新建文件",
+    "newFolder": "新建文件夹"
+  },
+  "prompts": {
+    "enterFileName": "请输入文件名：",
+    "enterFolderName": "请输入文件夹名：",
+    "enterNewName": "请输入新名称：",
+    "confirmDelete": "确定要删除此文件吗？"
+  }
+}

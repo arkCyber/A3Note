@@ -1,0 +1,15 @@
+{
+  "toggleSidebar": "サイドバーを切り替え",
+  "openWorkspace": "ワークスペースを開く",
+  "newFile": "新しいファイル",
+  "newFileShortcut": "新しいファイル (⌘+N)",
+  "save": "保存",
+  "saveShortcut": "保存 (⌘+S)",
+  "saving": "保存中...",
+  "search": "検索",
+  "searchShortcut": "検索 (⌘+Shift+F)",
+  "settings": "設定",
+  "themeToggle": "テーマを切り替え",
+  "switchToLight": "ライトモードに切り替え",
+  "switchToDark": "ダークモードに切り替え"
+}

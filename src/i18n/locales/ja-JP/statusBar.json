@@ -1,0 +1,8 @@
+{
+  "words": "単語数",
+  "lines": "行数",
+  "characters": "文字数",
+  "position": "Ln {{line}}, Col {{column}}",
+  "language": "Markdown",
+  "noFile": "ファイルが開かれていません"
+}

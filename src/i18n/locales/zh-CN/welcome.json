@@ -1,0 +1,13 @@
+{
+  "title": "欢迎使用 A3Note",
+  "subtitle": "一个现代化的 Markdown 笔记应用",
+  "openWorkspace": "打开工作区",
+  "description": "选择一个文件夹开始使用",
+  "features": {
+    "title": "特性",
+    "markdown": "Markdown 支持",
+    "preview": "实时预览",
+    "search": "全文搜索",
+    "themes": "多种主题"
+  }
+}

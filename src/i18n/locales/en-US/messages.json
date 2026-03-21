@@ -1,0 +1,21 @@
+{
+  "errors": {
+    "fileNotFound": "File not found",
+    "cannotReadFile": "Cannot read file",
+    "cannotSaveFile": "Cannot save file",
+    "cannotDeleteFile": "Cannot delete file",
+    "cannotCreateFile": "Cannot create file",
+    "invalidFileName": "Invalid file name",
+    "fileAlreadyExists": "File already exists"
+  },
+  "success": {
+    "fileSaved": "File saved",
+    "fileDeleted": "File deleted",
+    "fileCreated": "File created",
+    "fileRenamed": "File renamed"
+  },
+  "confirmations": {
+    "deleteFile": "Are you sure you want to delete \"{{fileName}}\"?",
+    "unsavedChanges": "You have unsaved changes. Save them?"
+  }
+}

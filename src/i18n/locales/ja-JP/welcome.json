@@ -1,0 +1,13 @@
+{
+  "title": "A3Noteへようこそ",
+  "subtitle": "モダンなMarkdownノートアプリ",
+  "openWorkspace": "ワークスペースを開く",
+  "description": "フォルダを選択して開始",
+  "features": {
+    "title": "機能",
+    "markdown": "Markdownサポート",
+    "preview": "ライブプレビュー",
+    "search": "全文検索",
+    "themes": "複数のテーマ"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "errors": {
+    "fileNotFound": "文件未找到",
+    "cannotReadFile": "无法读取文件",
+    "cannotSaveFile": "无法保存文件",
+    "cannotDeleteFile": "无法删除文件",
+    "cannotCreateFile": "无法创建文件",
+    "invalidFileName": "无效的文件名",
+    "fileAlreadyExists": "文件已存在"
+  },
+  "success": {
+    "fileSaved": "文件已保存",
+    "fileDeleted": "文件已删除",
+    "fileCreated": "文件已创建",
+    "fileRenamed": "文件已重命名"
+  },
+  "confirmations": {
+    "deleteFile": "确定要删除 \"{{fileName}}\" 吗？",
+    "unsavedChanges": "有未保存的更改。是否保存？"
+  }
+}
