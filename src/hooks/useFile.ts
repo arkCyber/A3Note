@@ -23,7 +23,7 @@ export function useFile() {
 
   // Open and load file
   const openFile = useCallback(async (file: FileItem) => {
-    if (file.isDirectory) {
+    if (!file || file.isDirectory) {
       return;
     }
 
@@ -32,7 +32,7 @@ export function useFile() {
       const fileContent = await tauriApi.readFile(file.path);
       setState({
         currentFile: file,
-        content: fileContent.content,
+        content: fileContent?.content || '',
         isDirty: false,
         isSaving: false,
         error: null,

@@ -50,7 +50,7 @@ export function useWorkspace() {
   const openWorkspace = useCallback(async () => {
     try {
       const path = await tauriApi.openDirectoryDialog();
-      if (path) {
+      if (path && typeof path === 'string') {
         await loadWorkspace(path);
       }
     } catch (error) {
@@ -60,10 +60,10 @@ export function useWorkspace() {
 
   // Refresh current workspace
   const refreshWorkspace = useCallback(async () => {
-    if (workspace.path) {
+    if (workspace?.path) {
       await loadWorkspace(workspace.path);
     }
-  }, [workspace.path, loadWorkspace]);
+  }, [workspace?.path, loadWorkspace]);
 
   // Create new file in workspace
   const createFile = useCallback(

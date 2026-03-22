@@ -23,21 +23,19 @@ export function usePlugins() {
       try {
         console.log('Initializing plugin system...');
         
-        // Register all sample plugins
-        await app.plugins.registerPlugin(SamplePlugin, samplePluginManifest);
-        console.log('Sample plugin registered');
+        // Register all sample plugins only if not already registered
+        const registerIfNotExists = async (PluginClass: any, manifest: any, name: string) => {
+          if (!app.plugins.getPlugin(manifest.id)) {
+            await app.plugins.registerPlugin(PluginClass, manifest);
+            console.log(`${name} registered`);
+          }
+        };
         
-        await app.plugins.registerPlugin(WordCountPlugin, wordCountManifest);
-        console.log('Word Count plugin registered');
-        
-        await app.plugins.registerPlugin(QuickSwitcherPlugin, quickSwitcherManifest);
-        console.log('Quick Switcher plugin registered');
-        
-        await app.plugins.registerPlugin(BacklinksPlugin, backlinksManifest);
-        console.log('Backlinks plugin registered');
-        
-        await app.plugins.registerPlugin(TagsPlugin, tagsManifest);
-        console.log('Tags plugin registered');
+        await registerIfNotExists(SamplePlugin, samplePluginManifest, 'Sample plugin');
+        await registerIfNotExists(WordCountPlugin, wordCountManifest, 'Word Count plugin');
+        await registerIfNotExists(QuickSwitcherPlugin, quickSwitcherManifest, 'Quick Switcher plugin');
+        await registerIfNotExists(BacklinksPlugin, backlinksManifest, 'Backlinks plugin');
+        await registerIfNotExists(TagsPlugin, tagsManifest, 'Tags plugin');
         
         // Load enabled plugins from storage
         await app.plugins.loadEnabledPlugins();
