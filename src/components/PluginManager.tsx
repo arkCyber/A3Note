@@ -4,7 +4,6 @@
  */
 
 import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { app } from '../plugins/api/App';
 import { PluginInstance } from '../plugins/loader/PluginManager';
 
@@ -13,7 +12,6 @@ interface PluginManagerProps {
 }
 
 export default function PluginManager({ onClose }: PluginManagerProps) {
-  const { t } = useTranslation('settings');
   const [plugins, setPlugins] = useState<PluginInstance[]>([]);
   const [loading, setLoading] = useState(false);
   
@@ -80,7 +78,7 @@ export default function PluginManager({ onClose }: PluginManagerProps) {
           {plugins.length === 0 ? (
             <div className="text-center text-muted-foreground py-8">
               <p className="text-lg mb-2">No plugins installed</p>
-              <p className="text-sm">Install plugins to extend A3Note's functionality</p>
+              <p className="text-sm">Install plugins to extend A3Note&apos;s functionality</p>
             </div>
           ) : (
             <div className="space-y-4">

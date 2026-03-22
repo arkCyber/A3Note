@@ -91,8 +91,20 @@ export class MetadataCache {
    * Get first link path in file
    */
   getFirstLinkpathDest(linkpath: string, sourcePath: string): TFile | null {
-    // Resolve link to file
-    return null;
+    const resolvedPath = this.resolveLinkPath(linkpath, sourcePath);
+    const name = resolvedPath.split('/').pop() || resolvedPath;
+
+    return {
+      path: resolvedPath,
+      name,
+      basename: name.replace(/\.md$/, ''),
+      extension: 'md',
+      stat: {
+        ctime: Date.now(),
+        mtime: Date.now(),
+        size: 0,
+      },
+    };
   }
   
   /**
@@ -256,7 +268,9 @@ export class MetadataCache {
    * Listen for cache changes
    */
   on(event: 'changed' | 'resolved', callback: (file: TFile) => void): void {
-    window.addEventListener(`metadata-cache:${event}`, callback as EventListener);
+    window.addEventListener(`metadata-cache:${event}`, ((evt: Event) => {
+      callback((evt as CustomEvent<TFile>).detail);
+    }) as EventListener);
   }
   
   /**

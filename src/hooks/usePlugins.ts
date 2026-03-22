@@ -16,7 +16,9 @@ export function usePlugins() {
   
   useEffect(() => {
     const initializePlugins = async () => {
-      if (initialized) return;
+      if (initialized) {
+        return;
+      }
       
       try {
         console.log('Initializing plugin system...');

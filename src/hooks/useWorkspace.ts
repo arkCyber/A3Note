@@ -17,14 +17,6 @@ export function useWorkspace() {
     error: null,
   });
 
-  // Load workspace from localStorage on mount
-  useEffect(() => {
-    const savedPath = localStorage.getItem("workspacePath");
-    if (savedPath) {
-      loadWorkspace(savedPath);
-    }
-  }, []);
-
   // Load workspace directory
   const loadWorkspace = useCallback(async (path: string) => {
     setWorkspace((prev) => ({ ...prev, loading: true, error: null }));
@@ -45,6 +37,14 @@ export function useWorkspace() {
       }));
     }
   }, []);
+
+  // Load workspace from localStorage on mount
+  useEffect(() => {
+    const savedPath = localStorage.getItem("workspacePath");
+    if (savedPath) {
+      loadWorkspace(savedPath);
+    }
+  }, [loadWorkspace]);
 
   // Open workspace picker dialog
   const openWorkspace = useCallback(async () => {
@@ -68,7 +68,9 @@ export function useWorkspace() {
   // Create new file in workspace
   const createFile = useCallback(
     async (name: string, isDirectory: boolean = false) => {
-      if (!workspace.path) return;
+      if (!workspace.path) {
+        return;
+      }
 
       const fullPath = `${workspace.path}/${name}`;
       try {

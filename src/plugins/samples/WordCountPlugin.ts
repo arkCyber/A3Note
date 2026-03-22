@@ -87,7 +87,9 @@ export default class WordCountPlugin extends Plugin {
       .replace(/[#*_~]/g, '') // Remove markdown formatting
       .trim();
     
-    if (!cleanText) return 0;
+    if (!cleanText) {
+      return 0;
+    }
     
     // Split by whitespace and filter empty strings
     const words = cleanText.split(/\s+/).filter(word => word.length > 0);
@@ -98,7 +100,9 @@ export default class WordCountPlugin extends Plugin {
    * Update status bar display
    */
   private updateStatusBar() {
-    if (!this.statusBarItem) return;
+    if (!this.statusBarItem) {
+      return;
+    }
     
     this.statusBarItem.textContent = `${this.wordCount} words, ${this.charCount} chars`;
     this.statusBarItem.title = 'Click for detailed statistics';
@@ -128,7 +132,9 @@ Reading time: ~${Math.ceil(this.wordCount / 200)} min
    */
   private countSpaces(): number {
     const activeFile = this.app.workspace.getActiveFile();
-    if (!activeFile) return 0;
+    if (!activeFile) {
+      return 0;
+    }
     
     // This is a simplified version
     // In real implementation, we'd read the file again

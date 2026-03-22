@@ -5,7 +5,6 @@
 
 import { useState, useEffect } from 'react';
 import { RefreshCw, Download, Check, AlertCircle } from 'lucide-react';
-import { app } from '../plugins/api/App';
 
 interface PluginUpdate {
   id: string;

@@ -51,7 +51,9 @@ export default class QuickSwitcherPlugin extends Plugin {
    * Open quick switcher modal
    */
   private openQuickSwitcher() {
-    if (this.isOpen) return;
+    if (this.isOpen) {
+      return;
+    }
     
     this.isOpen = true;
     
@@ -97,7 +99,9 @@ export default class QuickSwitcherPlugin extends Plugin {
     
     const searchTerm = prompt(`Search in ${activeFile.name}:`);
     
-    if (!searchTerm) return;
+    if (!searchTerm) {
+      return;
+    }
     
     this.app.vault.read(activeFile).then((content: string) => {
       const lines = content.split('\n');

@@ -138,7 +138,9 @@ describe('Plugin System', () => {
       plugin.addCommand({
         id: 'test-command',
         name: 'Test Command',
-        callback: () => { commandExecuted = true; }
+        callback: () => {
+          commandExecuted = true;
+        }
       });
       
       const command = app.commands.findCommand('test-command');
@@ -245,7 +247,9 @@ More text
       app.commands.registerCommand({
         id: 'test-cmd',
         name: 'Test Command',
-        callback: () => { executed = true; }
+        callback: () => {
+          executed = true;
+        }
       });
       
       const result = app.commands.executeCommand('test-cmd');

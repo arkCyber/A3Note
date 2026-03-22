@@ -36,7 +36,7 @@ export class Workspace {
   /**
    * Get active view
    */
-  getActiveViewOfType(type: string): any {
+  getActiveViewOfType(_type: string): any {
     // Return the active view of specified type
     return null;
   }
@@ -44,7 +44,7 @@ export class Workspace {
   /**
    * Get leaf by type
    */
-  getLeavesOfType(type: string): WorkspaceLeaf[] {
+  getLeavesOfType(_type: string): WorkspaceLeaf[] {
     // Return all leaves of specified type
     return [];
   }
@@ -59,21 +59,21 @@ export class Workspace {
   /**
    * Get left split
    */
-  getLeftLeaf(split: boolean): WorkspaceLeaf {
+  getLeftLeaf(_split: boolean): WorkspaceLeaf {
     return {} as WorkspaceLeaf;
   }
   
   /**
    * Get right split
    */
-  getRightLeaf(split: boolean): WorkspaceLeaf {
+  getRightLeaf(_split: boolean): WorkspaceLeaf {
     return {} as WorkspaceLeaf;
   }
   
   /**
    * Open a file
    */
-  async openLinkText(linktext: string, sourcePath: string, newLeaf?: boolean): Promise<void> {
+  async openLinkText(_linktext: string, _sourcePath: string, _newLeaf?: boolean): Promise<void> {
     // Implementation to open a file by link text
   }
   
@@ -157,21 +157,21 @@ export class Workspace {
   /**
    * Change layout
    */
-  changeLayout(layout: any): Promise<void> {
+  changeLayout(_layout: any): Promise<void> {
     return Promise.resolve();
   }
   
   /**
    * Iterate all leaves
    */
-  iterateAllLeaves(callback: (leaf: WorkspaceLeaf) => void): void {
+  iterateAllLeaves(_callback: (leaf: WorkspaceLeaf) => void): void {
     // Iterate through all workspace leaves
   }
   
   /**
    * Iterate root leaves
    */
-  iterateRootLeaves(callback: (leaf: WorkspaceLeaf) => void): void {
+  iterateRootLeaves(_callback: (leaf: WorkspaceLeaf) => void): void {
     // Iterate through root leaves
   }
 }

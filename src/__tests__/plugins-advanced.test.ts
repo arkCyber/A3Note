@@ -11,39 +11,37 @@ import { TFile } from '../plugins/api/Vault';
 
 // Advanced test plugin with more features
 class AdvancedTestPlugin extends Plugin {
-  commands: string[] = [];
-  views: string[] = [];
-  ribbonIcons: number = 0;
-  statusBarItems: number = 0;
+  executedCommands: string[] = [];
+  ribbonIconClicks: number = 0;
+  statusBarItemCount: number = 0;
   
   async onload() {
     // Add multiple commands
     this.addCommand({
       id: 'cmd-1',
       name: 'Command 1',
-      callback: () => this.commands.push('cmd-1')
+      callback: () => this.executedCommands.push('cmd-1')
     });
     
     this.addCommand({
       id: 'cmd-2',
       name: 'Command 2',
-      callback: () => this.commands.push('cmd-2')
+      callback: () => this.executedCommands.push('cmd-2')
     });
     
     // Add ribbon icon
     this.addRibbonIcon('star', 'Test Icon', () => {
-      this.ribbonIcons++;
+      this.ribbonIconClicks++;
     });
     
     // Add status bar item
     const statusBar = this.addStatusBarItem();
     statusBar.textContent = 'Advanced Plugin';
-    this.statusBarItems++;
+    this.statusBarItemCount++;
   }
   
   async onunload() {
-    this.commands = [];
-    this.views = [];
+    this.executedCommands = [];
   }
 }
 
@@ -127,14 +125,14 @@ describe('Advanced Plugin System Tests', () => {
       await app.plugins.registerPlugin(AdvancedTestPlugin, advancedManifest);
       await app.plugins.enablePlugin('advanced-test-plugin');
       
-      const plugin = app.plugins.getPlugin('advanced-test-plugin') as AdvancedTestPlugin;
+      const plugin = app.plugins.getPlugin('advanced-test-plugin') as unknown as AdvancedTestPlugin;
       
       // Execute commands
       app.commands.executeCommand('cmd-1');
       app.commands.executeCommand('cmd-2');
       
-      expect(plugin.commands).toContain('cmd-1');
-      expect(plugin.commands).toContain('cmd-2');
+      expect(plugin.executedCommands).toContain('cmd-1');
+      expect(plugin.executedCommands).toContain('cmd-2');
     });
     
     it('should unregister commands when plugin is disabled', async () => {
@@ -220,7 +218,7 @@ Text with [[nested/link]] and #nested/tag.
       expect(metadata).toBeDefined();
       expect(metadata?.headings).toHaveLength(3);
       expect(metadata?.links).toHaveLength(3);
-      expect(metadata?.tags).toHaveLength(2);
+      expect(metadata?.tags).toHaveLength(3);
       
       // Check heading levels
       expect(metadata?.headings?.[0].level).toBe(1);
@@ -297,7 +295,7 @@ Text with [[nested/link]] and #nested/tag.
       expect(app.workspace.getActiveFile()).toBeNull();
     });
     
-    it('should trigger workspace events', (done) => {
+    it('should trigger workspace events', async () => {
       const testFile: TFile = {
         path: '/test.md',
         name: 'test.md',
@@ -305,12 +303,14 @@ Text with [[nested/link]] and #nested/tag.
         extension: 'md',
         stat: { ctime: Date.now(), mtime: Date.now(), size: 0 }
       };
+
+      await new Promise<void>((resolve) => {
+        app.workspace.on('active-leaf-change', () => {
+          resolve();
+        });
       
-      app.workspace.on('active-leaf-change', () => {
-        done();
+        app.workspace.setActiveFile(testFile);
       });
-      
-      app.workspace.setActiveFile(testFile);
     });
   });
   
@@ -341,9 +341,7 @@ Text with [[nested/link]] and #nested/tag.
     it('should call onload when plugin is enabled', async () => {
       await app.plugins.registerPlugin(AdvancedTestPlugin, advancedManifest);
       await app.plugins.enablePlugin('advanced-test-plugin');
-      
-      const plugin = app.plugins.getPlugin('advanced-test-plugin') as AdvancedTestPlugin;
-      
+
       // Check that onload was called (commands should be registered)
       const allCommands = app.commands.getAllCommands();
       expect(allCommands.length).toBeGreaterThan(0);
@@ -353,13 +351,13 @@ Text with [[nested/link]] and #nested/tag.
       await app.plugins.registerPlugin(AdvancedTestPlugin, advancedManifest);
       await app.plugins.enablePlugin('advanced-test-plugin');
       
-      const plugin = app.plugins.getPlugin('advanced-test-plugin') as AdvancedTestPlugin;
-      plugin.commands.push('test');
+      const plugin = app.plugins.getPlugin('advanced-test-plugin') as unknown as AdvancedTestPlugin;
+      plugin.executedCommands.push('test');
       
       await app.plugins.disablePlugin('advanced-test-plugin');
       
       // Check that onunload was called (commands should be cleared)
-      expect(plugin.commands).toHaveLength(0);
+      expect(plugin.executedCommands).toHaveLength(0);
     });
   });
 });

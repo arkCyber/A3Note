@@ -45,6 +45,7 @@ describe('useWorkspace', () => {
     const mockFiles = [
       { path: '/new/workspace/note.md', name: 'note.md', isDirectory: false },
     ];
+    const setItemSpy = vi.spyOn(window.localStorage, 'setItem');
 
     vi.mocked(open).mockResolvedValueOnce(mockPath);
     vi.mocked(invoke).mockResolvedValueOnce(mockFiles);
@@ -58,7 +59,7 @@ describe('useWorkspace', () => {
     await waitFor(() => {
       expect(result.current.workspace.path).toBe(mockPath);
       expect(result.current.workspace.files).toEqual(mockFiles);
-      expect(localStorage.setItem).toHaveBeenCalledWith('workspacePath', mockPath);
+      expect(setItemSpy).toHaveBeenCalledWith('workspacePath', mockPath);
     });
   });
 

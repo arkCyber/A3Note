@@ -5,7 +5,7 @@ import Editor from "./components/Editor";
 import PreviewPane from "./components/PreviewPane";
 import SearchPanel from "./components/SearchPanel";
 import StatusBar from "./components/StatusBar";
-import CommandPalette from "./components/CommandPalette";
+import CommandPalette, { type Command } from "./components/CommandPalette";
 import Settings from "./components/Settings";
 import WelcomeScreen from "./components/WelcomeScreen";
 import PluginManager from "./components/PluginManager";
@@ -30,7 +30,7 @@ function App() {
   const { workspace, openWorkspace, refreshWorkspace, deleteFile } = useWorkspace();
   const { currentFile, content, isDirty, isSaving, openFile, saveFile, updateContent, createNewFile } = useFile();
   const { query, results, isSearching, search, clearSearch } = useSearch(workspace.path);
-  const { initialized: pluginsInitialized } = usePlugins();
+  usePlugins();
 
   // Initialize plugin system with workspace path when workspace is loaded
   useEffect(() => {
@@ -39,6 +39,20 @@ function App() {
       console.log('Plugin system initialized with workspace:', workspace.path);
     }
   }, [workspace.path]);
+
+  const handleNewFile = async () => {
+    if (!workspace.path) {
+      await openWorkspace();
+      return;
+    }
+
+    const fileName = prompt("Enter file name (e.g., note.md):");
+    if (fileName) {
+      const fullPath = `${workspace.path}/${fileName}`;
+      await createNewFile(fullPath);
+      await refreshWorkspace();
+    }
+  };
 
   // Define commands for command palette
   const commands: Command[] = useMemo(() => [
@@ -128,20 +142,6 @@ function App() {
 
   const handleFileSelect = async (file: FileItem) => {
     await openFile(file);
-  };
-
-  const handleNewFile = async () => {
-    if (!workspace.path) {
-      await openWorkspace();
-      return;
-    }
-
-    const fileName = prompt("Enter file name (e.g., note.md):");
-    if (fileName) {
-      const fullPath = `${workspace.path}/${fileName}`;
-      await createNewFile(fullPath);
-      await refreshWorkspace();
-    }
   };
 
   const handleDeleteFile = async (path: string) => {
@@ -236,6 +236,9 @@ function App() {
       )}
       {pluginManagerOpen && (
         <PluginManager onClose={() => setPluginManagerOpen(false)} />
+      )}
+      {pluginMarketplaceOpen && (
+        <PluginMarketplace onClose={() => setPluginMarketplaceOpen(false)} />
       )}
     </div>
   );

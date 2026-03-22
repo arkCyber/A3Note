@@ -23,7 +23,9 @@ export function useFile() {
 
   // Open and load file
   const openFile = useCallback(async (file: FileItem) => {
-    if (file.isDirectory) return;
+    if (file.isDirectory) {
+      return;
+    }
 
     setState((prev) => ({ ...prev, error: null }));
     try {
@@ -45,7 +47,9 @@ export function useFile() {
 
   // Save current file
   const saveFile = useCallback(async () => {
-    if (!state.currentFile || !state.isDirty) return;
+    if (!state.currentFile || !state.isDirty) {
+      return;
+    }
 
     setState((prev) => ({ ...prev, isSaving: true, error: null }));
     try {

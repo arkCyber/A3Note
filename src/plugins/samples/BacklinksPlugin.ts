@@ -77,7 +77,9 @@ export default class BacklinksPlugin extends Plugin {
    * Update status bar display
    */
   private updateStatusBar() {
-    if (!this.statusBarItem) return;
+    if (!this.statusBarItem) {
+      return;
+    }
     
     this.statusBarItem.textContent = `🔗 ${this.backlinksCount} backlinks`;
     this.statusBarItem.title = 'Click to show backlinks';

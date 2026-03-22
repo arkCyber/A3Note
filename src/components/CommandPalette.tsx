@@ -41,7 +41,9 @@ export default function CommandPalette({ isOpen, onClose, commands }: CommandPal
 
   // Handle keyboard navigation
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      return;
+    }
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -66,7 +68,9 @@ export default function CommandPalette({ isOpen, onClose, commands }: CommandPal
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, selectedIndex, filteredCommands, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 bg-black/50">

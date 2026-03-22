@@ -4,10 +4,12 @@
  */
 
 export { App, app, Commands } from './App';
-export { Vault, TFile, TFolder } from './Vault';
-export { Workspace, WorkspaceLeaf } from './Workspace';
-export {
-  MetadataCache,
+export { Vault } from './Vault';
+export type { TFile, TFolder } from './Vault';
+export { Workspace } from './Workspace';
+export type { WorkspaceLeaf } from './Workspace';
+export { MetadataCache } from './MetadataCache';
+export type {
   CachedMetadata,
   LinkCache,
   EmbedCache,

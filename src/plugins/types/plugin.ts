@@ -132,7 +132,7 @@ export abstract class Plugin {
   /**
    * Register an event handler
    */
-  registerEvent(event: any): void {
+  registerEvent(_event: any): void {
     // Event handling implementation
   }
   

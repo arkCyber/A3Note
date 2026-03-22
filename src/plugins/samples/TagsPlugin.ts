@@ -86,7 +86,9 @@ export default class TagsPlugin extends Plugin {
    * Update status bar display
    */
   private updateStatusBar() {
-    if (!this.statusBarItem) return;
+    if (!this.statusBarItem) {
+      return;
+    }
     
     this.statusBarItem.textContent = `🏷️ ${this.tagsCount} tags`;
     this.statusBarItem.title = 'Click to show all tags';
@@ -141,7 +143,9 @@ ${tagsList}
   private searchByTag() {
     const tag = prompt('Enter tag to search (e.g., #todo):');
     
-    if (!tag) return;
+    if (!tag) {
+      return;
+    }
     
     const normalizedTag = tag.startsWith('#') ? tag : `#${tag}`;
     const files = this.app.vault.getMarkdownFiles();

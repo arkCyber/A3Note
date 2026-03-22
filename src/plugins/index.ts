@@ -11,4 +11,5 @@ export * from './types/manifest';
 export * from './types/plugin';
 
 // Loader exports
-export { PluginManager, PluginInstance } from './loader/PluginManager';
+export { PluginManager } from './loader/PluginManager';
+export type { PluginInstance } from './loader/PluginManager';

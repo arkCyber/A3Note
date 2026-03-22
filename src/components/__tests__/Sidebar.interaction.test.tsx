@@ -94,10 +94,10 @@ describe('Sidebar Interactions', () => {
       const file = screen.getByText('file1.md');
       fireEvent.contextMenu(file);
 
-      expect(screen.getByText('Open')).toBeInTheDocument();
-      expect(screen.getByText('Rename')).toBeInTheDocument();
-      expect(screen.getByText('Copy Path')).toBeInTheDocument();
-      expect(screen.getByText('Delete')).toBeInTheDocument();
+      expect(screen.getByText('contextMenu.open')).toBeInTheDocument();
+      expect(screen.getByText('contextMenu.rename')).toBeInTheDocument();
+      expect(screen.getByText('contextMenu.copyPath')).toBeInTheDocument();
+      expect(screen.getAllByText('contextMenu.delete')[0]).toBeInTheDocument();
     });
 
     it('should show folder context menu on right-click folder', () => {
@@ -114,10 +114,10 @@ describe('Sidebar Interactions', () => {
       const folder = screen.getByText('folder');
       fireEvent.contextMenu(folder);
 
-      expect(screen.getByText('New File')).toBeInTheDocument();
-      expect(screen.getByText('New Folder')).toBeInTheDocument();
-      expect(screen.getByText('Rename')).toBeInTheDocument();
-      expect(screen.getByText('Delete')).toBeInTheDocument();
+      expect(screen.getByText('contextMenu.newFile')).toBeInTheDocument();
+      expect(screen.getByText('contextMenu.newFolder')).toBeInTheDocument();
+      expect(screen.getByText('contextMenu.rename')).toBeInTheDocument();
+      expect(screen.getAllByText('contextMenu.delete')[0]).toBeInTheDocument();
     });
 
     it('should close context menu when clicking outside', () => {
@@ -134,11 +134,11 @@ describe('Sidebar Interactions', () => {
       const file = screen.getByText('file1.md');
       fireEvent.contextMenu(file);
 
-      expect(screen.getByText('Open')).toBeInTheDocument();
+      expect(screen.getByText('contextMenu.open')).toBeInTheDocument();
 
       fireEvent.mouseDown(document.body);
 
-      expect(screen.queryByText('Open')).not.toBeInTheDocument();
+      expect(screen.queryByText('contextMenu.open')).not.toBeInTheDocument();
     });
 
     it('should execute context menu action and close menu', () => {
@@ -155,11 +155,11 @@ describe('Sidebar Interactions', () => {
       const file = screen.getByText('file1.md');
       fireEvent.contextMenu(file);
 
-      const openButton = screen.getByText('Open');
+      const openButton = screen.getByText('contextMenu.open');
       fireEvent.click(openButton);
 
       expect(mockOnFileSelect).toHaveBeenCalledWith(mockFiles[0]);
-      expect(screen.queryByText('Open')).not.toBeInTheDocument();
+      expect(screen.queryByText('contextMenu.open')).not.toBeInTheDocument();
     });
 
     it('should show hover effect on file items', () => {

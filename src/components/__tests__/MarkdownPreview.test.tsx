@@ -69,7 +69,7 @@ describe('MarkdownPreview', () => {
 
   it('should update when markdown changes', () => {
     const { rerender } = render(
-      <MarkdownPreview markdown="# Initial" />
+      <MarkdownPreview content="# Initial" />
     );
     
     expect(screen.getByText('Initial')).toBeInTheDocument();

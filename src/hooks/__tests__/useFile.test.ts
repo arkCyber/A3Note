@@ -8,7 +8,6 @@ vi.mock('@tauri-apps/api/core');
 describe('useFile', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.useFakeTimers();
   });
 
   afterEach(() => {
@@ -94,6 +93,8 @@ describe('useFile', () => {
   });
 
   it('should auto-save after 2 seconds', async () => {
+    vi.useFakeTimers();
+
     const mockFile = {
       path: '/test/note.md',
       name: 'note.md',
@@ -123,15 +124,15 @@ describe('useFile', () => {
       await vi.runAllTimersAsync();
     });
 
-    await waitFor(() => {
-      expect(invoke).toHaveBeenCalledWith('write_file_content', {
-        path: mockFile.path,
-        content: 'Modified',
-      });
+    expect(invoke).toHaveBeenCalledWith('write_file_content', {
+      path: mockFile.path,
+      content: 'Modified',
     });
   });
 
   it('should debounce auto-save', async () => {
+    vi.useFakeTimers();
+
     const mockFile = {
       path: '/test/note.md',
       name: 'note.md',
@@ -176,11 +177,9 @@ describe('useFile', () => {
       await vi.runAllTimersAsync();
     });
 
-    await waitFor(() => {
-      expect(invoke).toHaveBeenCalledWith('write_file_content', {
-        path: mockFile.path,
-        content: 'Change 3',
-      });
+    expect(invoke).toHaveBeenCalledWith('write_file_content', {
+      path: mockFile.path,
+      content: 'Change 3',
     });
   });
 

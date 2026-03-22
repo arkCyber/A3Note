@@ -28,7 +28,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   tabSize: 2,
 };
 
-export default function Settings({ onClose, onOpenPlugins }: SettingsProps) {
+export default function Settings({ onClose, onOpenPlugins: _onOpenPlugins }: SettingsProps) {
   const { t, i18n } = useTranslation('settings');
   const { theme, setTheme } = useTheme();
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);

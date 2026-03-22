@@ -15,7 +15,6 @@ export default function MarkdownPreview({ content, className = '' }: MarkdownPre
     marked.setOptions({
       gfm: true,
       breaks: true,
-      mangle: false,
     });
 
     // Convert markdown to HTML

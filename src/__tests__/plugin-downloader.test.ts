@@ -69,7 +69,7 @@ describe('Plugin Downloader', () => {
     });
 
     it('should reject invalid manifest', () => {
-      const invalidManifest = {
+      const invalidManifest: Partial<{ id: string; name: string; version: string }> = {
         name: 'Test Plugin',
         // missing id and version
       };

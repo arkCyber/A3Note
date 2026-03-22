@@ -140,8 +140,12 @@ export default function PluginMarketplace({ onClose }: PluginMarketplaceProps) {
       return matchesSearch && matchesCategory;
     })
     .sort((a, b) => {
-      if (sortBy === 'downloads') return b.downloads - a.downloads;
-      if (sortBy === 'rating') return b.rating - a.rating;
+      if (sortBy === 'downloads') {
+        return b.downloads - a.downloads;
+      }
+      if (sortBy === 'rating') {
+        return b.rating - a.rating;
+      }
       return a.name.localeCompare(b.name);
     });
 
@@ -172,7 +176,9 @@ export default function PluginMarketplace({ onClose }: PluginMarketplaceProps) {
   };
 
   const handleUninstall = async (plugin: MarketplacePlugin) => {
-    if (!confirm(`Uninstall "${plugin.name}"?`)) return;
+    if (!confirm(`Uninstall "${plugin.name}"?`)) {
+      return;
+    }
     
     try {
       await app.plugins.unloadPlugin(plugin.id);

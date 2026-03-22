@@ -9,16 +9,21 @@ vi.mock('@tauri-apps/api/core');
 vi.mock('@tauri-apps/plugin-dialog');
 
 describe('App Integration - All Buttons and Menus', () => {
+  const getOpenWorkspaceButton = () => screen.getByRole('button', { name: /Open Workspace/i });
+
   beforeEach(() => {
     vi.clearAllMocks();
     
     // Mock workspace data
     vi.mocked(tauriApi.invoke).mockImplementation((cmd: string) => {
-      if (cmd === 'list_files') {
+      if (cmd === 'list_directory') {
         return Promise.resolve([
           { path: '/test/file1.md', name: 'file1.md', isDirectory: false },
           { path: '/test/file2.md', name: 'file2.md', isDirectory: false },
         ]);
+      }
+      if (cmd === 'create_file' || cmd === 'write_file_content' || cmd === 'delete_file') {
+        return Promise.resolve(undefined);
       }
       if (cmd === 'read_file_content') {
         return Promise.resolve({ path: '/test/file1.md', content: '# Test' });
@@ -34,101 +39,100 @@ describe('App Integration - All Buttons and Menus', () => {
       render(<App />);
       
       // Open workspace first
-      const openButton = screen.getByTitle('Open workspace');
+      const openButton = getOpenWorkspaceButton();
       fireEvent.click(openButton);
       
       await waitFor(() => {
-        expect(screen.getByTitle('Toggle sidebar')).toBeInTheDocument();
-        expect(screen.getByTitle('Open workspace')).toBeInTheDocument();
-        expect(screen.getByTitle(/New file/)).toBeInTheDocument();
-        expect(screen.getByTitle(/Save/)).toBeInTheDocument();
-        expect(screen.getByTitle(/Search/)).toBeInTheDocument();
-        expect(screen.getByTitle('Settings')).toBeInTheDocument();
+        expect(screen.getByTitle('toggleSidebar')).toBeInTheDocument();
+        expect(screen.getByTitle('openWorkspace')).toBeInTheDocument();
+        expect(screen.getByTitle('newFileShortcut')).toBeInTheDocument();
+        expect(screen.getByTitle('saveShortcut')).toBeInTheDocument();
+        expect(screen.getByTitle('searchShortcut')).toBeInTheDocument();
+        expect(screen.getByTitle('settings')).toBeInTheDocument();
       });
     });
 
     it('should toggle sidebar when sidebar button clicked', async () => {
       render(<App />);
       
-      const openButton = screen.getByTitle('Open workspace');
+      const openButton = getOpenWorkspaceButton();
       fireEvent.click(openButton);
       
       await waitFor(() => {
-        expect(screen.getByText('Files')).toBeInTheDocument();
+        expect(screen.getByText('title')).toBeInTheDocument();
       });
       
-      const sidebarButton = screen.getByTitle('Toggle sidebar');
+      const sidebarButton = screen.getByTitle('toggleSidebar');
       fireEvent.click(sidebarButton);
       
       await waitFor(() => {
-        expect(screen.queryByText('Files')).not.toBeInTheDocument();
+        expect(screen.queryByText('title')).not.toBeInTheDocument();
       });
     });
 
     it('should open Settings when Settings button clicked', async () => {
       render(<App />);
       
-      const openButton = screen.getByTitle('Open workspace');
+      const openButton = getOpenWorkspaceButton();
       fireEvent.click(openButton);
       
       await waitFor(() => {
-        const settingsButton = screen.getByTitle('Settings');
+        const settingsButton = screen.getByTitle('settings');
         fireEvent.click(settingsButton);
       });
       
       await waitFor(() => {
-        expect(screen.getByText('Settings')).toBeInTheDocument();
-        expect(screen.getByText('Appearance')).toBeInTheDocument();
+        expect(screen.getByText('appearance')).toBeInTheDocument();
       });
     });
 
     it('should close Settings when close button clicked', async () => {
       render(<App />);
       
-      const openButton = screen.getByTitle('Open workspace');
+      const openButton = getOpenWorkspaceButton();
       fireEvent.click(openButton);
       
       await waitFor(() => {
-        const settingsButton = screen.getByTitle('Settings');
+        const settingsButton = screen.getByTitle('settings');
         fireEvent.click(settingsButton);
       });
       
       await waitFor(() => {
-        expect(screen.getByText('Settings')).toBeInTheDocument();
+        expect(screen.getByText('appearance')).toBeInTheDocument();
       });
       
-      const closeButton = screen.getByTitle('Close');
+      const closeButton = screen.getByTitle('close');
       fireEvent.click(closeButton);
       
       await waitFor(() => {
-        expect(screen.queryByText('Appearance')).not.toBeInTheDocument();
+        expect(screen.queryByText('appearance')).not.toBeInTheDocument();
       });
     });
 
     it('should toggle search panel when search button clicked', async () => {
       render(<App />);
       
-      const openButton = screen.getByTitle('Open workspace');
+      const openButton = getOpenWorkspaceButton();
       fireEvent.click(openButton);
       
       await waitFor(() => {
-        const searchButton = screen.getByTitle(/Search/);
+        const searchButton = screen.getByTitle('searchShortcut');
         fireEvent.click(searchButton);
       });
       
       await waitFor(() => {
-        expect(screen.getByPlaceholderText(/Search/)).toBeInTheDocument();
+        expect(screen.getByPlaceholderText('Search in files...')).toBeInTheDocument();
       });
     });
 
     it('should disable save button when no changes', async () => {
       render(<App />);
       
-      const openButton = screen.getByTitle('Open workspace');
+      const openButton = getOpenWorkspaceButton();
       fireEvent.click(openButton);
       
       await waitFor(() => {
-        const saveButton = screen.getByTitle(/Save/);
+        const saveButton = screen.getByTitle('saveShortcut');
         expect(saveButton).toBeDisabled();
       });
     });
@@ -138,7 +142,7 @@ describe('App Integration - All Buttons and Menus', () => {
     it('should open command palette with ⌘+P', async () => {
       render(<App />);
       
-      const openButton = screen.getByTitle('Open workspace');
+      const openButton = getOpenWorkspaceButton();
       fireEvent.click(openButton);
       
       await waitFor(() => {
@@ -146,31 +150,31 @@ describe('App Integration - All Buttons and Menus', () => {
       });
       
       await waitFor(() => {
-        expect(screen.getByPlaceholderText(/Search commands/)).toBeInTheDocument();
+        expect(screen.getByPlaceholderText('Type a command or search...')).toBeInTheDocument();
       });
     });
 
     it('should toggle sidebar with ⌘+B', async () => {
       render(<App />);
       
-      const openButton = screen.getByTitle('Open workspace');
+      const openButton = getOpenWorkspaceButton();
       fireEvent.click(openButton);
       
       await waitFor(() => {
-        expect(screen.getByText('Files')).toBeInTheDocument();
+        expect(screen.getByText('title')).toBeInTheDocument();
       });
       
       fireEvent.keyDown(document, { key: 'b', metaKey: true });
       
       await waitFor(() => {
-        expect(screen.queryByText('Files')).not.toBeInTheDocument();
+        expect(screen.queryByText('title')).not.toBeInTheDocument();
       });
     });
 
     it('should toggle search with ⌘+Shift+F', async () => {
       render(<App />);
       
-      const openButton = screen.getByTitle('Open workspace');
+      const openButton = getOpenWorkspaceButton();
       fireEvent.click(openButton);
       
       await waitFor(() => {
@@ -178,14 +182,14 @@ describe('App Integration - All Buttons and Menus', () => {
       });
       
       await waitFor(() => {
-        expect(screen.getByPlaceholderText(/Search/)).toBeInTheDocument();
+        expect(screen.getByPlaceholderText('Search in files...')).toBeInTheDocument();
       });
     });
 
     it('should toggle preview with ⌘+E', async () => {
       render(<App />);
       
-      const openButton = screen.getByTitle('Open workspace');
+      const openButton = getOpenWorkspaceButton();
       fireEvent.click(openButton);
       
       await waitFor(() => {
@@ -200,11 +204,9 @@ describe('App Integration - All Buttons and Menus', () => {
 
   describe('CommandPalette Commands', () => {
     it('should execute New File command', async () => {
-      const confirmSpy = vi.spyOn(window, 'prompt').mockReturnValue('test.md');
-      
       render(<App />);
       
-      const openButton = screen.getByTitle('Open workspace');
+      const openButton = getOpenWorkspaceButton();
       fireEvent.click(openButton);
       
       await waitFor(() => {
@@ -212,7 +214,7 @@ describe('App Integration - All Buttons and Menus', () => {
       });
       
       await waitFor(() => {
-        const input = screen.getByPlaceholderText(/Search commands/);
+        const input = screen.getByPlaceholderText('Type a command or search...');
         fireEvent.change(input, { target: { value: 'new' } });
       });
       
@@ -221,18 +223,17 @@ describe('App Integration - All Buttons and Menus', () => {
         fireEvent.click(newFileCommand);
       });
       
-      expect(confirmSpy).toHaveBeenCalled();
-      confirmSpy.mockRestore();
+      expect(screen.queryByText('New File')).not.toBeInTheDocument();
     });
 
     it('should execute Toggle Sidebar command', async () => {
       render(<App />);
       
-      const openButton = screen.getByTitle('Open workspace');
+      const openButton = getOpenWorkspaceButton();
       fireEvent.click(openButton);
       
       await waitFor(() => {
-        expect(screen.getByText('Files')).toBeInTheDocument();
+        expect(screen.getByText('title')).toBeInTheDocument();
       });
       
       await waitFor(() => {
@@ -240,7 +241,7 @@ describe('App Integration - All Buttons and Menus', () => {
       });
       
       await waitFor(() => {
-        const input = screen.getByPlaceholderText(/Search commands/);
+        const input = screen.getByPlaceholderText('Type a command or search...');
         fireEvent.change(input, { target: { value: 'sidebar' } });
       });
       
@@ -250,7 +251,7 @@ describe('App Integration - All Buttons and Menus', () => {
       });
       
       await waitFor(() => {
-        expect(screen.queryByText('Files')).not.toBeInTheDocument();
+        expect(screen.queryByText('title')).not.toBeInTheDocument();
       });
     });
   });
@@ -259,34 +260,35 @@ describe('App Integration - All Buttons and Menus', () => {
     it('should show all settings sections', async () => {
       render(<App />);
       
-      const openButton = screen.getByTitle('Open workspace');
+      const openButton = getOpenWorkspaceButton();
       fireEvent.click(openButton);
       
       await waitFor(() => {
-        const settingsButton = screen.getByTitle('Settings');
+        const settingsButton = screen.getByTitle('settings');
         fireEvent.click(settingsButton);
       });
       
       await waitFor(() => {
-        expect(screen.getByText('Appearance')).toBeInTheDocument();
-        expect(screen.getByText('Editor')).toBeInTheDocument();
-        expect(screen.getByText('Behavior')).toBeInTheDocument();
+        expect(screen.getByText('appearance')).toBeInTheDocument();
+        expect(screen.getByText('editor')).toBeInTheDocument();
       });
     });
 
     it('should save settings when Save button clicked', async () => {
       render(<App />);
       
-      const openButton = screen.getByTitle('Open workspace');
+      const openButton = getOpenWorkspaceButton();
       fireEvent.click(openButton);
       
       await waitFor(() => {
-        const settingsButton = screen.getByTitle('Settings');
+        const settingsButton = screen.getByTitle('settings');
         fireEvent.click(settingsButton);
       });
       
       await waitFor(() => {
-        const saveButton = screen.getByText('Save');
+        const sliders = screen.getAllByRole('slider');
+        fireEvent.change(sliders[0], { target: { value: '18' } });
+        const saveButton = screen.getByText('save');
         fireEvent.click(saveButton);
       });
       
@@ -297,22 +299,22 @@ describe('App Integration - All Buttons and Menus', () => {
     it('should reset settings when Reset button clicked', async () => {
       render(<App />);
       
-      const openButton = screen.getByTitle('Open workspace');
+      const openButton = getOpenWorkspaceButton();
       fireEvent.click(openButton);
       
       await waitFor(() => {
-        const settingsButton = screen.getByTitle('Settings');
+        const settingsButton = screen.getByTitle('settings');
         fireEvent.click(settingsButton);
       });
       
       await waitFor(() => {
-        const resetButton = screen.getByText('Reset to Defaults');
+        const resetButton = screen.getByText('reset');
         fireEvent.click(resetButton);
       });
       
       // Should reset to default values
       await waitFor(() => {
-        const saveButton = screen.getByText('Save');
+        const saveButton = screen.getByText('save');
         expect(saveButton).toBeInTheDocument();
       });
     });
@@ -322,7 +324,7 @@ describe('App Integration - All Buttons and Menus', () => {
     it('should toggle theme when theme button clicked', async () => {
       render(<App />);
       
-      const openButton = screen.getByTitle('Open workspace');
+      const openButton = getOpenWorkspaceButton();
       fireEvent.click(openButton);
       
       await waitFor(() => {

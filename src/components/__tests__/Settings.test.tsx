@@ -5,6 +5,10 @@ import Settings from '../Settings';
 describe('Settings', () => {
   const mockOnClose = vi.fn();
 
+  const getThemeSelect = () => screen.getAllByRole('combobox')[0] as HTMLSelectElement;
+  const getFontSizeSlider = () => screen.getAllByRole('slider')[0] as HTMLInputElement;
+  const getAutoSaveCheckbox = () => screen.getAllByRole('checkbox')[0] as HTMLInputElement;
+
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.clear();
@@ -13,15 +17,15 @@ describe('Settings', () => {
   it('should render settings dialog', () => {
     render(<Settings onClose={mockOnClose} />);
     
-    expect(screen.getByText('Settings')).toBeInTheDocument();
-    expect(screen.getByText('Appearance')).toBeInTheDocument();
-    expect(screen.getByText('Editor')).toBeInTheDocument();
+    expect(screen.getByText('title')).toBeInTheDocument();
+    expect(screen.getByText('appearance')).toBeInTheDocument();
+    expect(screen.getByText('editor')).toBeInTheDocument();
   });
 
   it('should close when close button is clicked', () => {
     render(<Settings onClose={mockOnClose} />);
     
-    const closeButton = screen.getByTitle('Close');
+    const closeButton = screen.getByTitle('close');
     fireEvent.click(closeButton);
     
     expect(mockOnClose).toHaveBeenCalledTimes(1);
@@ -29,7 +33,6 @@ describe('Settings', () => {
 
   it('should load settings from localStorage', () => {
     const savedSettings = {
-      theme: 'light',
       fontSize: 16,
       autoSave: false,
     };
@@ -37,14 +40,14 @@ describe('Settings', () => {
     
     render(<Settings onClose={mockOnClose} />);
     
-    const themeSelect = screen.getByRole('combobox') as HTMLSelectElement;
-    expect(themeSelect.value).toBe('light');
+    expect(getFontSizeSlider().value).toBe('16');
+    expect(getAutoSaveCheckbox().checked).toBe(false);
   });
 
   it('should update theme setting', () => {
     render(<Settings onClose={mockOnClose} />);
     
-    const themeSelect = screen.getByRole('combobox') as HTMLSelectElement;
+    const themeSelect = getThemeSelect();
     fireEvent.change(themeSelect, { target: { value: 'light' } });
     
     expect(themeSelect.value).toBe('light');
@@ -53,16 +56,17 @@ describe('Settings', () => {
   it('should update font size', () => {
     render(<Settings onClose={mockOnClose} />);
     
-    const fontSizeSlider = screen.getByLabelText(/Font Size:/);
+    const fontSizeSlider = getFontSizeSlider();
     fireEvent.change(fontSizeSlider, { target: { value: '18' } });
     
-    expect(screen.getByText(/Font Size: 18px/)).toBeInTheDocument();
+    expect(screen.getByText(/fontSize/)).toBeInTheDocument();
+    expect(fontSizeSlider.value).toBe('18');
   });
 
   it('should toggle auto save', () => {
     render(<Settings onClose={mockOnClose} />);
     
-    const autoSaveCheckbox = screen.getByLabelText('Auto Save') as HTMLInputElement;
+    const autoSaveCheckbox = getAutoSaveCheckbox();
     const initialValue = autoSaveCheckbox.checked;
     
     fireEvent.click(autoSaveCheckbox);
@@ -72,46 +76,46 @@ describe('Settings', () => {
   it('should save settings to localStorage', async () => {
     render(<Settings onClose={mockOnClose} />);
     
-    const themeSelect = screen.getByRole('combobox');
-    fireEvent.change(themeSelect, { target: { value: 'light' } });
+    const fontSizeSlider = getFontSizeSlider();
+    fireEvent.change(fontSizeSlider, { target: { value: '18' } });
     
-    const saveButton = screen.getByText('Save Changes');
+    const saveButton = screen.getByText('save');
     fireEvent.click(saveButton);
     
     await waitFor(() => {
       const saved = localStorage.getItem('appSettings');
       expect(saved).toBeTruthy();
       const parsed = JSON.parse(saved!);
-      expect(parsed.theme).toBe('light');
+      expect(parsed.fontSize).toBe(18);
     });
   });
 
   it('should reset to defaults', () => {
     render(<Settings onClose={mockOnClose} />);
     
-    const themeSelect = screen.getByRole('combobox') as HTMLSelectElement;
-    fireEvent.change(themeSelect, { target: { value: 'light' } });
+    const fontSizeSlider = getFontSizeSlider();
+    fireEvent.change(fontSizeSlider, { target: { value: '18' } });
     
-    const resetButton = screen.getByText('Reset to Defaults');
+    const resetButton = screen.getByText('reset');
     fireEvent.click(resetButton);
     
-    expect(themeSelect.value).toBe('dark');
+    expect(getFontSizeSlider().value).toBe('14');
   });
 
   it('should disable save button when no changes', () => {
     render(<Settings onClose={mockOnClose} />);
     
-    const saveButton = screen.getByText('Save Changes') as HTMLButtonElement;
+    const saveButton = screen.getByText('save') as HTMLButtonElement;
     expect(saveButton.disabled).toBe(true);
   });
 
   it('should enable save button when changes are made', () => {
     render(<Settings onClose={mockOnClose} />);
     
-    const themeSelect = screen.getByRole('combobox');
-    fireEvent.change(themeSelect, { target: { value: 'light' } });
+    const fontSizeSlider = getFontSizeSlider();
+    fireEvent.change(fontSizeSlider, { target: { value: '18' } });
     
-    const saveButton = screen.getByText('Save Changes') as HTMLButtonElement;
+    const saveButton = screen.getByText('save') as HTMLButtonElement;
     expect(saveButton.disabled).toBe(false);
   });
 
@@ -121,10 +125,10 @@ describe('Settings', () => {
     
     render(<Settings onClose={mockOnClose} />);
     
-    const themeSelect = screen.getByRole('combobox');
-    fireEvent.change(themeSelect, { target: { value: 'light' } });
+    const fontSizeSlider = getFontSizeSlider();
+    fireEvent.change(fontSizeSlider, { target: { value: '18' } });
     
-    const saveButton = screen.getByText('Save Changes');
+    const saveButton = screen.getByText('save');
     fireEvent.click(saveButton);
     
     await waitFor(() => {

@@ -15,7 +15,9 @@ export default function Editor({ currentFile, content, onContentChange }: Editor
   const viewRef = useRef<EditorView | null>(null);
 
   useEffect(() => {
-    if (!editorRef.current) return;
+    if (!editorRef.current) {
+      return;
+    }
 
     // Initialize CodeMirror editor
     const startState = EditorState.create({

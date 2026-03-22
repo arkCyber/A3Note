@@ -1,4 +1,4 @@
-import { Menu, FolderOpen, FilePlus, Save, Search, Settings as SettingsIcon, FileText, Loader2, Package } from "lucide-react";
+import { Menu, FolderOpen, Save, Search, Settings as SettingsIcon, FileText, Loader2, Package } from "lucide-react";
 import { FileItem } from "../types";
 import ThemeToggle from "./ThemeToggle";
 import { useTranslation } from 'react-i18next';
