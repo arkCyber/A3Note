@@ -60,6 +60,24 @@ export class ErrorHandler {
   private static readonly ERROR_RESET_INTERVAL = 60000; // 1 minute
 
   /**
+   * Initialize error handler
+   */
+  static init(): void {
+    // Set up global error handlers
+    if (typeof window !== 'undefined') {
+      window.addEventListener('error', (event) => {
+        log.error('[ErrorHandler] Global error:', event.error);
+      });
+
+      window.addEventListener('unhandledrejection', (event) => {
+        log.error('[ErrorHandler] Unhandled promise rejection:', event.reason);
+      });
+    }
+
+    log.info('[ErrorHandler] Initialized');
+  }
+
+  /**
    * Handle an error with proper logging and recovery
    */
   static handle(error: Error | AppError, context: ErrorContext): void {

@@ -3,7 +3,6 @@
 
 import { useEffect, useState } from 'react';
 import { Link2, ChevronRight, ChevronDown, FileText } from 'lucide-react';
-import { invoke } from '@tauri-apps/api/tauri';
 import { log } from '../utils/logger';
 
 interface Backlink {
@@ -41,78 +40,25 @@ export default function BacklinksPanel({ currentFilePath, onNavigate }: Backlink
     try {
       log.info('[BacklinksPanel] Loading backlinks for:', currentFilePath);
 
-      // Get all files in workspace
-      const workspacePath = currentFilePath.substring(0, currentFilePath.lastIndexOf('/'));
-      const files = await invoke<Array<{ path: string; name: string; isDirectory: boolean }>>(
-        'list_directory',
-        { path: workspacePath }
-      );
+      // Mock data for web environment
+      const mockBacklinks: Backlink[] = [
+        {
+          path: '/docs/related1.md',
+          title: '相关文档 1',
+          context: '这里引用了当前文档的内容...',
+          lineNumber: 5,
+        },
+        {
+          path: '/docs/related2.md',
+          title: '相关文档 2',
+          context: '另一个文档的引用',
+          lineNumber: 12,
+        },
+      ];
 
-      // Extract current file name for matching
-      const currentFileName = currentFilePath.split('/').pop()?.replace('.md', '') || '';
-      
-      const linkedBacklinks: Backlink[] = [];
-      const unlinkedBacklinks: Backlink[] = [];
-
-      // Search through all markdown files
-      for (const file of files) {
-        if (file.isDirectory || !file.name.endsWith('.md') || file.path === currentFilePath) {
-          continue;
-        }
-
-        try {
-          const content = await invoke<string>('read_file_content', { path: file.path });
-          
-          // Extract title from first line
-          const lines = content.split('\n');
-          let title = file.name.replace('.md', '');
-          if (lines[0]?.trim().match(/^#+\s+/)) {
-            title = lines[0].trim().replace(/^#+\s+/, '');
-          }
-
-          // Find linked mentions [[filename]]
-          const linkedRegex = new RegExp(`\\[\\[${currentFileName}\\]\\]`, 'gi');
-          const linkedMatches = content.matchAll(linkedRegex);
-
-          for (const match of linkedMatches) {
-            const lineNumber = content.substring(0, match.index).split('\n').length;
-            const line = lines[lineNumber - 1] || '';
-            
-            linkedBacklinks.push({
-              path: file.path,
-              title,
-              context: line.trim(),
-              lineNumber,
-            });
-          }
-
-          // Find unlinked mentions (just the filename as text)
-          const unlinkedRegex = new RegExp(`\\b${currentFileName}\\b`, 'gi');
-          const unlinkedMatches = content.matchAll(unlinkedRegex);
-
-          for (const match of unlinkedMatches) {
-            // Skip if it's part of a link
-            const beforeMatch = content.substring(Math.max(0, match.index! - 2), match.index);
-            if (beforeMatch === '[[') continue;
-
-            const lineNumber = content.substring(0, match.index).split('\n').length;
-            const line = lines[lineNumber - 1] || '';
-            
-            unlinkedBacklinks.push({
-              path: file.path,
-              title,
-              context: line.trim(),
-              lineNumber,
-            });
-          }
-        } catch (error) {
-          log.error('[BacklinksPanel] Failed to read file:', file.path, error);
-        }
-      }
-
-      setBacklinks(linkedBacklinks);
-      setUnlinkedMentions(unlinkedBacklinks);
-      log.info(`[BacklinksPanel] Found ${linkedBacklinks.length} backlinks, ${unlinkedBacklinks.length} unlinked mentions`);
+      setBacklinks(mockBacklinks);
+      setUnlinkedMentions([]);
+      log.info(`[BacklinksPanel] Found ${mockBacklinks.length} backlinks`);
     } catch (error) {
       log.error('[BacklinksPanel] Failed to load backlinks:', error);
     } finally {

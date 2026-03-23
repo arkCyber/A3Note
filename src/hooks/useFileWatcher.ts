@@ -45,9 +45,17 @@ export function useFileWatcher(
 
     log.info('[FileWatcher] Starting file watcher for:', workspacePath);
 
-    // Listen for file system events from Tauri backend
     const setupListener = async () => {
       try {
+        log.info('[FileWatcher] Setting up file watcher...');
+        
+        // Check if we're in Tauri environment
+        if (typeof window === 'undefined' || !window.__TAURI__) {
+          log.warn('[FileWatcher] Not in Tauri environment, file watcher disabled');
+          return;
+        }
+        
+        // Listen for file system events from Tauri backend
         const unlisten = await listen<FileSystemEvent>('file-system-event', (event) => {
           const { type, path, oldPath } = event.payload;
           

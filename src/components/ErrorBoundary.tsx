@@ -45,7 +45,7 @@ export class ErrorBoundary extends Component<Props, State> {
     log.error('[ErrorBoundary] Error info:', errorInfo);
 
     // Report to error handler
-    ErrorHandler.handleError(error, {
+    ErrorHandler.handle(error, {
       severity: ErrorSeverity.HIGH,
       context: 'ErrorBoundary',
       componentStack: errorInfo.componentStack,

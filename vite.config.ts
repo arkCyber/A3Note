@@ -7,9 +7,11 @@ export default defineConfig({
   plugins: [react()],
   clearScreen: false,
   server: {
-    host: host || false,
-    port: 1420,
-    strictPort: true,
+    host: '0.0.0.0',
+    port: 3000,
+    strictPort: false,
+    open: true,
+    cors: true,
     hmr: host
       ? {
           protocol: "ws",

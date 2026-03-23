@@ -3,7 +3,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Network, Share2, ZoomIn, ZoomOut, Maximize2, Filter } from 'lucide-react';
-import { invoke } from '@tauri-apps/api/tauri';
 import { log } from '../utils/logger';
 
 interface GraphNode {
@@ -60,76 +59,41 @@ export default function GraphView({ workspacePath, currentFilePath, onNavigate, 
     try {
       log.info('[GraphView] Loading graph data for:', workspacePath);
 
-      // Get all files
-      const files = await invoke<Array<{ path: string; name: string; isDirectory: boolean }>>(
-        'list_directory',
-        { path: workspacePath }
-      );
+      // Mock data for web environment
+      const mockNodes: GraphNode[] = [
+        {
+          id: '/docs/note1.md',
+          label: '笔记 1',
+          path: '/docs/note1.md',
+          size: 15,
+          color: '#3b82f6',
+          tags: ['重要', '工作'],
+        },
+        {
+          id: '/docs/note2.md',
+          label: '笔记 2',
+          path: '/docs/note2.md',
+          size: 12,
+          color: '#6b7280',
+          tags: ['个人'],
+        },
+        {
+          id: '/docs/note3.md',
+          label: '笔记 3',
+          path: '/docs/note3.md',
+          size: 10,
+          color: '#6b7280',
+          tags: ['项目'],
+        },
+      ];
 
-      const nodes: GraphNode[] = [];
-      const links: GraphLink[] = [];
-      const linkCounts = new Map<string, number>();
+      const mockLinks: GraphLink[] = [
+        { source: '/docs/note1.md', target: '/docs/note2.md', strength: 1 },
+        { source: '/docs/note1.md', target: '/docs/note3.md', strength: 0.8 },
+      ];
 
-      // Build nodes and links
-      for (const file of files) {
-        if (file.isDirectory || !file.name.endsWith('.md')) continue;
-
-        try {
-          const content = await invoke<string>('read_file_content', { path: file.path });
-          
-          // Extract title
-          const lines = content.split('\n');
-          let title = file.name.replace('.md', '');
-          if (lines[0]?.trim().match(/^#+\s+/)) {
-            title = lines[0].trim().replace(/^#+\s+/, '');
-          }
-
-          // Extract tags
-          const tags = (content.match(/#[\w\u4e00-\u9fa5]+/g) || []).map(tag => tag.substring(1));
-
-          // Count links to this file
-          linkCounts.set(file.path, 0);
-
-          // Create node
-          nodes.push({
-            id: file.path,
-            label: title,
-            path: file.path,
-            size: 10,
-            color: file.path === currentFilePath ? '#3b82f6' : '#6b7280',
-            tags,
-          });
-
-          // Extract links
-          const linkMatches = content.matchAll(/\[\[([^\]]+)\]\]/g);
-          for (const match of linkMatches) {
-            const linkedFileName = match[1];
-            const linkedFile = files.find(f => 
-              f.name.replace('.md', '') === linkedFileName
-            );
-
-            if (linkedFile) {
-              links.push({
-                source: file.path,
-                target: linkedFile.path,
-                strength: 1,
-              });
-              linkCounts.set(linkedFile.path, (linkCounts.get(linkedFile.path) || 0) + 1);
-            }
-          }
-        } catch (error) {
-          log.error('[GraphView] Failed to process file:', file.path, error);
-        }
-      }
-
-      // Update node sizes based on link counts
-      nodes.forEach(node => {
-        const count = linkCounts.get(node.id) || 0;
-        node.size = 10 + Math.min(count * 3, 30);
-      });
-
-      setGraphData({ nodes, links });
-      log.info(`[GraphView] Loaded ${nodes.length} nodes, ${links.length} links`);
+      setGraphData({ nodes: mockNodes, links: mockLinks });
+      log.info(`[GraphView] Loaded ${mockNodes.length} nodes, ${mockLinks.length} links`);
     } catch (error) {
       log.error('[GraphView] Failed to load graph data:', error);
     } finally {

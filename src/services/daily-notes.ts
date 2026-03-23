@@ -1,8 +1,6 @@
 // Daily Notes Service - Aerospace Grade
 // Manages daily notes creation and navigation
 
-import { invoke } from '@tauri-apps/api/tauri';
-import { templateService } from './templates';
 import { log } from '../utils/logger';
 
 export interface DailyNoteConfig {

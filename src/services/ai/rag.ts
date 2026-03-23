@@ -1,7 +1,7 @@
 // RAG Service - Aerospace Grade
 // TypeScript service for Retrieval Augmented Generation
 
-import { invoke } from '@tauri-apps/api/tauri';
+import { log } from '../../utils/logger';
 import type { SearchResult } from './semantic-search';
 
 /**

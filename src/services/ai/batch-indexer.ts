@@ -1,9 +1,8 @@
 // Batch Indexer Service - Aerospace Grade
 // Efficiently indexes entire workspace for semantic search
 
-import { invoke } from '@tauri-apps/api/tauri';
-import { semanticSearch } from './semantic-search';
 import { log } from '../../utils/logger';
+import { semanticSearch } from './semantic-search';
 
 export interface IndexingProgress {
   current: number;
@@ -159,12 +158,21 @@ export class BatchIndexer {
    * Scan workspace for all markdown files
    */
   private async scanMarkdownFiles(
-    workspacePath: string
+    basePath: string
   ): Promise<Array<{ path: string; name: string }>> {
     try {
+      log.info('[BatchIndexer] Scanning directory:', basePath);
+      
+      // Check if we're in Tauri environment
+      if (typeof window === 'undefined' || !window.__TAURI__) {
+        log.warn('[BatchIndexer] Not in Tauri environment, using mock data');
+        return [];
+      }
+      
+      const { invoke } = await import('@tauri-apps/api/core');
       const files = await invoke<Array<{ path: string; name: string; isDirectory: boolean }>>(
         'list_directory',
-        { path: workspacePath }
+        { path: basePath }
       );
 
       // Filter markdown files and recursively scan directories

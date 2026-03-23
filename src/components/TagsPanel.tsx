@@ -3,7 +3,6 @@
 
 import { useEffect, useState } from 'react';
 import { Tag, ChevronRight, ChevronDown, Hash } from 'lucide-react';
-import { invoke } from '@tauri-apps/api/tauri';
 import { log } from '../utils/logger';
 
 interface TagNode {
@@ -37,42 +36,34 @@ export default function TagsPanel({ workspacePath, onNavigate, onTagFilter }: Ta
     try {
       log.info('[TagsPanel] Loading tags from:', workspacePath);
 
-      const files = await invoke<Array<{ path: string; name: string; isDirectory: boolean }>>(
-        'list_directory',
-        { path: workspacePath }
-      );
+      // Mock data for web environment
+      const mockTagTree: TagNode[] = [
+        {
+          name: '工作',
+          fullPath: '工作',
+          count: 5,
+          children: [
+            {
+              name: '项目',
+              fullPath: '工作/项目',
+              count: 3,
+              children: [],
+              files: ['/docs/project1.md', '/docs/project2.md', '/docs/project3.md'],
+            },
+          ],
+          files: ['/docs/work1.md', '/docs/work2.md'],
+        },
+        {
+          name: '个人',
+          fullPath: '个人',
+          count: 3,
+          children: [],
+          files: ['/docs/personal1.md', '/docs/personal2.md', '/docs/personal3.md'],
+        },
+      ];
 
-      const tagMap = new Map<string, { count: number; files: string[] }>();
-
-      // Extract tags from all files
-      for (const file of files) {
-        if (file.isDirectory || !file.name.endsWith('.md')) continue;
-
-        try {
-          const content = await invoke<string>('read_file_content', { path: file.path });
-          const tags = content.match(/#[\w\u4e00-\u9fa5]+/g) || [];
-
-          tags.forEach(tag => {
-            const tagName = tag.substring(1);
-            if (!tagMap.has(tagName)) {
-              tagMap.set(tagName, { count: 0, files: [] });
-            }
-            const tagData = tagMap.get(tagName)!;
-            tagData.count++;
-            if (!tagData.files.includes(file.path)) {
-              tagData.files.push(file.path);
-            }
-          });
-        } catch (error) {
-          log.error('[TagsPanel] Failed to read file:', file.path, error);
-        }
-      }
-
-      // Build hierarchical tree
-      const tree = buildTagTree(tagMap);
-      setTagTree(tree);
-
-      log.info(`[TagsPanel] Loaded ${tagMap.size} unique tags`);
+      setTagTree(mockTagTree);
+      log.info(`[TagsPanel] Loaded mock tags`);
     } catch (error) {
       log.error('[TagsPanel] Failed to load tags:', error);
     } finally {

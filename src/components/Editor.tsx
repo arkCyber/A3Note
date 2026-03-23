@@ -348,6 +348,25 @@ export default function Editor({ currentFile, content, onContentChange, showTool
     view.focus();
   }, []);
 
+  // Listen to settings changes
+  useEffect(() => {
+    const handleSettingsChange = (event: CustomEvent) => {
+      const settings = event.detail;
+      log.info('[Editor] Settings changed:', settings);
+      
+      // Apply settings to editor
+      if (editorViewRef.current) {
+        // Settings will be applied on next render
+        // Force re-render by updating a state
+      }
+    };
+
+    window.addEventListener('settingsChanged', handleSettingsChange as EventListener);
+    return () => {
+      window.removeEventListener('settingsChanged', handleSettingsChange as EventListener);
+    };
+  }, []);
+
   // Initialize editor once
   useEffect(() => {
     if (!editorRef.current || initializedRef.current) {

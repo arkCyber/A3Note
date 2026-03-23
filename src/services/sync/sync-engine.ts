@@ -1,7 +1,6 @@
 // Sync Engine - Aerospace Grade
 // Core synchronization engine
 
-import { invoke } from '@tauri-apps/api/tauri';
 import { log } from '../../utils/logger';
 import { syncEncryption } from './encryption';
 

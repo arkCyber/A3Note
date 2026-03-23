@@ -1,7 +1,7 @@
 // Semantic Search Service - Aerospace Grade
 // TypeScript service for semantic search and link suggestions
 
-import { invoke } from '@tauri-apps/api/tauri';
+import { log } from '../../utils/logger';
 
 /**
  * Search result from semantic search

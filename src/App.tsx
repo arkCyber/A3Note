@@ -4,6 +4,8 @@ import EnhancedSidebar from "./components/EnhancedSidebar";
 import Editor from "./components/Editor";
 import { log } from "./utils/logger";
 import { ErrorHandler, ErrorSeverity } from "./utils/errorHandler";
+import { useSettings } from "./hooks/useSettings";
+import { initializeThemeManager, updateTheme } from "./utils/themeManager";
 import PreviewPane from "./components/PreviewPane";
 import SearchPanel from "./components/SearchPanel";
 import StatusBar from "./components/StatusBar";
@@ -37,6 +39,7 @@ import { FileItem } from "./types";
 import { app } from "./plugins/api/App";
 
 function App() {
+  const { settings } = useSettings();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [searchOpen, setSearchOpen] = useState(false);
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
@@ -146,6 +149,22 @@ function App() {
   };
 
   // Handle title change from first line (Obsidian-style)
+  useEffect(() => {
+    log.info('A3Note initialized');
+    ErrorHandler.init();
+  }, []);
+
+  // Initialize theme manager
+  useEffect(() => {
+    const cleanup = initializeThemeManager(settings.baseTheme);
+    return cleanup;
+  }, [settings.baseTheme]);
+
+  // Update theme when settings change
+  useEffect(() => {
+    updateTheme(settings.baseTheme);
+  }, [settings.baseTheme]);
+
   useEffect(() => {
     if (!currentFile || !content) return;
 
