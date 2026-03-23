@@ -13,6 +13,9 @@ import {
 } from 'lucide-react';
 import { FileItem } from '../types';
 import { log } from '../utils/logger';
+import ExportDialog from './ExportDialog';
+import { useExport } from '../hooks/useExport';
+import { ExportOptions } from '../services/export';
 
 /**
  * More Options Menu Component
@@ -21,9 +24,7 @@ import { log } from '../utils/logger';
 
 interface MoreOptionsMenuProps {
   currentFile: FileItem | null;
-  onExportPDF?: () => void;
-  onExportHTML?: () => void;
-  onExportMarkdown?: () => void;
+  fileContent?: string;
   onCopyLink?: () => void;
   onShowInFolder?: () => void;
   onProperties?: () => void;
@@ -32,16 +33,16 @@ interface MoreOptionsMenuProps {
 
 export default function MoreOptionsMenu({
   currentFile,
-  onExportPDF,
-  onExportHTML,
-  onExportMarkdown,
+  fileContent = '',
   onCopyLink,
   onShowInFolder,
   onProperties,
   onDelete,
 }: MoreOptionsMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [showExportDialog, setShowExportDialog] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { isExporting, exportFile } = useExport();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -75,6 +76,17 @@ export default function MoreOptionsMenu({
     }
   };
 
+  const handleExport = async (options: ExportOptions) => {
+    await exportFile(fileContent, options);
+    setShowExportDialog(false);
+    setIsOpen(false);
+  };
+
+  const openExportDialog = () => {
+    setShowExportDialog(true);
+    setIsOpen(false);
+  };
+
   if (!currentFile) {
     return null;
   }
@@ -101,23 +113,8 @@ export default function MoreOptionsMenu({
             
             <MenuItem
               icon={<FileDown size={16} />}
-              label="Export as PDF"
-              onClick={() => handleAction(onExportPDF, 'Export PDF')}
-              disabled={!onExportPDF}
-            />
-            
-            <MenuItem
-              icon={<Globe size={16} />}
-              label="Export as HTML"
-              onClick={() => handleAction(onExportHTML, 'Export HTML')}
-              disabled={!onExportHTML}
-            />
-            
-            <MenuItem
-              icon={<FileText size={16} />}
-              label="Export as Markdown"
-              onClick={() => handleAction(onExportMarkdown, 'Export Markdown')}
-              disabled={!onExportMarkdown}
+              label="Export document..."
+              onClick={openExportDialog}
             />
           </div>
 
@@ -186,6 +183,15 @@ export default function MoreOptionsMenu({
           </div>
         </div>
       )}
+
+      {/* Export Dialog */}
+      <ExportDialog
+        isOpen={showExportDialog}
+        onClose={() => setShowExportDialog(false)}
+        onExport={handleExport}
+        defaultFilename={currentFile.name.replace(/\.[^/.]+$/, '')}
+        isExporting={isExporting}
+      />
     </div>
   );
 }
