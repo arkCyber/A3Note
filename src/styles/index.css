@@ -4,6 +4,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import './markdown-media.css';
+
 /* Sidebar animations */
 @keyframes slideDown {
   from {

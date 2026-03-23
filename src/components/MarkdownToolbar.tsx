@@ -6,6 +6,8 @@ import {
   Heading3, 
   Link, 
   Image, 
+  Video,
+  Music,
   Code, 
   Quote, 
   List, 
@@ -57,6 +59,16 @@ export default function MarkdownToolbar({ onInsert }: MarkdownToolbarProps) {
       icon: Image,
       label: "Image",
       action: () => onInsert("![", "](url)"),
+    },
+    {
+      icon: Video,
+      label: "Video",
+      action: () => onInsert("![[video.mp4", "]]"),
+    },
+    {
+      icon: Music,
+      label: "Audio",
+      action: () => onInsert("![[audio.mp3", "]]"),
     },
     {
       icon: Code,

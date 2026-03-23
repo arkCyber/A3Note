@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
+import { convertObsidianToMarkdown } from '../utils/mediaParser';
 
 interface MarkdownPreviewProps {
   content: string;
@@ -21,6 +22,9 @@ export default function MarkdownPreview({ content, className = '' }: MarkdownPre
 
     // Convert markdown to HTML
     let processedContent = content;
+    
+    // Convert Obsidian media syntax to HTML
+    processedContent = convertObsidianToMarkdown(processedContent);
     
     // Process task lists (GitHub style)
     processedContent = processedContent.replace(
@@ -45,12 +49,16 @@ export default function MarkdownPreview({ content, className = '' }: MarkdownPre
         'table', 'thead', 'tbody', 'tr', 'th', 'td',
         'div', 'span',
         'input',
+        'video', 'audio', 'source',
       ],
       ALLOWED_ATTR: [
         'href', 'src', 'alt', 'title',
         'class', 'id',
         'target', 'rel',
         'type', 'checked', 'disabled',
+        'controls', 'autoplay', 'loop', 'muted',
+        'width', 'height', 'poster', 'preload',
+        'style',
       ],
     });
 
