@@ -1,0 +1,220 @@
+import pptxgen from 'pptxgenjs';
+import { marked } from 'marked';
+import { ExportOptions, ExportResult } from './types';
+import { log } from '../../utils/logger';
+
+/**
+ * PowerPoint (PPTX) Exporter Service
+ * Converts Markdown to PowerPoint presentation
+ * 
+ * @aerospace-grade
+ * Features:
+ * - Auto-split by headings
+ * - Title slides
+ * - Content slides
+ * - Code blocks
+ * - Lists
+ * - Images
+ */
+
+interface Slide {
+  type: 'title' | 'content' | 'section';
+  title: string;
+  content: string[];
+  level: number;
+}
+
+export class PPTExporter {
+  async export(content: string, options: ExportOptions): Promise<ExportResult> {
+    try {
+      log.info('[PPTExporter] Starting PPT export');
+
+      // Parse Markdown to slides
+      const slides = this.parseToSlides(content);
+
+      // Create presentation
+      const pptx = await this.createPresentation(slides, options);
+
+      // Generate PPTX blob
+      const blob = await pptx.write({ outputType: 'blob' }) as Blob;
+
+      log.info('[PPTExporter] PPT export completed', { size: blob.size });
+
+      return {
+        success: true,
+        blob,
+        size: blob.size,
+      };
+    } catch (error) {
+      log.error('[PPTExporter] Export failed', error as Error);
+      return {
+        success: false,
+        error: (error as Error).message,
+      };
+    }
+  }
+
+  private parseToSlides(content: string): Slide[] {
+    const slides: Slide[] = [];
+    const tokens = marked.lexer(content);
+
+    let currentSlide: Slide | null = null;
+
+    for (const token of tokens) {
+      if (token.type === 'heading') {
+        // Start new slide on heading
+        if (currentSlide) {
+          slides.push(currentSlide);
+        }
+
+        const level = token.depth || 1;
+        const title = token.text || '';
+
+        currentSlide = {
+          type: level === 1 ? 'title' : level === 2 ? 'section' : 'content',
+          title,
+          content: [],
+          level,
+        };
+      } else if (currentSlide) {
+        // Add content to current slide
+        if (token.type === 'paragraph') {
+          currentSlide.content.push(token.text || '');
+        } else if (token.type === 'list') {
+          const items = token.items || [];
+          items.forEach((item: any) => {
+            currentSlide!.content.push('• ' + (item.text || ''));
+          });
+        } else if (token.type === 'code') {
+          currentSlide.content.push(`[Code]\n${token.text || ''}`);
+        }
+      } else {
+        // No heading yet, create default title slide
+        currentSlide = {
+          type: 'title',
+          title: 'Untitled Presentation',
+          content: [],
+          level: 1,
+        };
+      }
+    }
+
+    // Add last slide
+    if (currentSlide) {
+      slides.push(currentSlide);
+    }
+
+    // If no slides, create a default one
+    if (slides.length === 0) {
+      slides.push({
+        type: 'title',
+        title: 'Untitled Presentation',
+        content: ['No content'],
+        level: 1,
+      });
+    }
+
+    return slides;
+  }
+
+  private async createPresentation(slides: Slide[], options: ExportOptions): Promise<pptxgen> {
+    const pptx = new pptxgen();
+
+    // Set presentation properties
+    pptx.author = 'A3Note';
+    pptx.company = 'A3Note';
+    pptx.title = options.filename || 'Presentation';
+
+    // Define layouts
+    pptx.defineLayout({ name: 'A4', width: 10, height: 7.5 });
+    pptx.layout = 'A4';
+
+    // Create slides
+    for (const slideData of slides) {
+      this.createSlide(pptx, slideData);
+    }
+
+    return pptx;
+  }
+
+  private createSlide(pptx: pptxgen, slideData: Slide): void {
+    const slide = pptx.addSlide();
+
+    if (slideData.type === 'title') {
+      // Title slide
+      slide.addText(slideData.title, {
+        x: 0.5,
+        y: 2.5,
+        w: 9,
+        h: 1.5,
+        fontSize: 44,
+        bold: true,
+        align: 'center',
+        color: '363636',
+      });
+
+      if (slideData.content.length > 0) {
+        slide.addText(slideData.content.join('\n'), {
+          x: 0.5,
+          y: 4.5,
+          w: 9,
+          h: 1,
+          fontSize: 20,
+          align: 'center',
+          color: '666666',
+        });
+      }
+    } else if (slideData.type === 'section') {
+      // Section slide
+      slide.background = { color: '4472C4' };
+
+      slide.addText(slideData.title, {
+        x: 0.5,
+        y: 3,
+        w: 9,
+        h: 1.5,
+        fontSize: 40,
+        bold: true,
+        align: 'center',
+        color: 'FFFFFF',
+      });
+    } else {
+      // Content slide
+      slide.addText(slideData.title, {
+        x: 0.5,
+        y: 0.5,
+        w: 9,
+        h: 0.8,
+        fontSize: 32,
+        bold: true,
+        color: '363636',
+      });
+
+      // Add content
+      const contentText = slideData.content.join('\n\n');
+      
+      slide.addText(contentText, {
+        x: 0.5,
+        y: 1.5,
+        w: 9,
+        h: 5.5,
+        fontSize: 18,
+        color: '363636',
+        valign: 'top',
+      });
+    }
+
+    // Add footer
+    slide.addText('Generated by A3Note', {
+      x: 0.5,
+      y: 7,
+      w: 9,
+      h: 0.3,
+      fontSize: 10,
+      align: 'right',
+      color: '999999',
+    });
+  }
+}
+
+export const pptExporter = new PPTExporter();

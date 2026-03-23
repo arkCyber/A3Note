@@ -101,6 +101,30 @@ export default function ExportDialog({
                 />
                 <span>Markdown File</span>
               </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="format"
+                  value="docx"
+                  checked={format === 'docx'}
+                  onChange={(e) => setFormat(e.target.value as ExportFormat)}
+                  disabled={isExporting}
+                  className="cursor-pointer"
+                />
+                <span>Word Document (.docx)</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="format"
+                  value="pptx"
+                  checked={format === 'pptx'}
+                  onChange={(e) => setFormat(e.target.value as ExportFormat)}
+                  disabled={isExporting}
+                  className="cursor-pointer"
+                />
+                <span>PowerPoint (.pptx)</span>
+              </label>
             </div>
           </div>
 

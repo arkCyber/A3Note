@@ -81,6 +81,22 @@ export function useExport() {
     });
   }, [exportFile]);
 
+  const exportAsWord = useCallback(async (content: string, filename?: string) => {
+    return exportFile(content, {
+      format: 'docx',
+      filename,
+      includeImages: true,
+      pageSize: 'A4',
+    });
+  }, [exportFile]);
+
+  const exportAsPPT = useCallback(async (content: string, filename?: string) => {
+    return exportFile(content, {
+      format: 'pptx',
+      filename,
+    });
+  }, [exportFile]);
+
   const resetError = useCallback(() => {
     setExportError(null);
   }, []);
@@ -93,6 +109,8 @@ export function useExport() {
     exportAsPDF,
     exportAsHTML,
     exportAsMarkdown,
+    exportAsWord,
+    exportAsPPT,
     resetError,
   };
 }

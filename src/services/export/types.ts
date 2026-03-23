@@ -3,7 +3,7 @@
  * Defines interfaces for file export functionality
  */
 
-export type ExportFormat = 'pdf' | 'html' | 'markdown' | 'docx';
+export type ExportFormat = 'pdf' | 'html' | 'markdown' | 'docx' | 'pptx';
 
 export interface ExportOptions {
   format: ExportFormat;

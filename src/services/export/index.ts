@@ -1,6 +1,8 @@
 import { pdfExporter } from './pdf-exporter';
 import { htmlExporter } from './html-exporter';
 import { markdownExporter } from './markdown-exporter';
+import { wordExporter } from './word-exporter';
+import { pptExporter } from './ppt-exporter';
 import { ExportOptions, ExportResult, ExportFormat } from './types';
 import { log } from '../../utils/logger';
 
@@ -27,6 +29,14 @@ export class ExportService {
         
         case 'markdown':
           result = await markdownExporter.export(content, options);
+          break;
+        
+        case 'docx':
+          result = await wordExporter.export(content, options);
+          break;
+        
+        case 'pptx':
+          result = await pptExporter.export(content, options);
           break;
         
         default:
@@ -81,6 +91,8 @@ export class ExportService {
         return 'md';
       case 'docx':
         return 'docx';
+      case 'pptx':
+        return 'pptx';
       default:
         return 'txt';
     }
