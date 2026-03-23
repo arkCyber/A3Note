@@ -20,6 +20,8 @@ import { mathExtension, mathTheme } from "../extensions/mathExtension";
 import { mermaidExtension, mermaidTheme } from "../extensions/mermaidExtension";
 import { enhancedSearchExtension, searchTheme } from "../extensions/searchExtension";
 import { tableExtension, tableTheme } from "../extensions/tableExtension";
+import { livePreviewExtension, livePreviewState, livePreviewTheme } from "../extensions/livePreviewExtension";
+import { spellCheckExtension, spellCheckState, spellCheckTheme } from "../extensions/spellCheckExtension";
 
 interface EditorProps {
   currentFile: FileItem | null;
@@ -370,6 +372,10 @@ export default function Editor({ currentFile, content, onContentChange, showTool
         mermaidExtension,
         enhancedSearchExtension,
         tableExtension,
+        livePreviewState,
+        livePreviewExtension,
+        spellCheckState,
+        spellCheckExtension,
         // vimExtension, // Uncomment to enable Vim mode
         keymap.of([
           ...foldingKeymap,
@@ -570,6 +576,8 @@ export default function Editor({ currentFile, content, onContentChange, showTool
         mermaidTheme,
         searchTheme,
         tableTheme,
+        livePreviewTheme,
+        spellCheckTheme,
         // vimTheme, // Uncomment to enable Vim mode theme,
         EditorView.updateListener.of((update) => {
           if (update.docChanged) {
