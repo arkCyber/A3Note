@@ -1,0 +1,38 @@
+{
+  "title": "Media Manager",
+  "upload": "Upload",
+  "delete": "Delete",
+  "preview": "Preview",
+  "insert": "Insert",
+  "download": "Download",
+  "copy": "Copy",
+  "rename": "Rename",
+  "filter": {
+    "all": "All",
+    "images": "Images",
+    "videos": "Videos",
+    "audio": "Audio",
+    "documents": "Documents"
+  },
+  "sort": {
+    "name": "By Name",
+    "date": "By Date",
+    "size": "By Size",
+    "type": "By Type"
+  },
+  "messages": {
+    "uploadSuccess": "Upload successful",
+    "uploadFailed": "Upload failed",
+    "deleteSuccess": "Delete successful",
+    "deleteFailed": "Delete failed",
+    "noFiles": "No files",
+    "dragDropHint": "Drag and drop files here to upload"
+  },
+  "info": {
+    "name": "Name",
+    "size": "Size",
+    "type": "Type",
+    "date": "Date",
+    "dimensions": "Dimensions"
+  }
+}

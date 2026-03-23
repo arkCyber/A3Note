@@ -1,0 +1,20 @@
+{
+  "title": "标签",
+  "noTags": "暂无标签",
+  "search": "搜索标签",
+  "count": "{{count}} 个笔记",
+  "actions": {
+    "rename": "重命名标签",
+    "delete": "删除标签",
+    "merge": "合并标签"
+  },
+  "sort": {
+    "name": "按名称",
+    "count": "按数量"
+  },
+  "messages": {
+    "renameSuccess": "标签已重命名",
+    "deleteSuccess": "标签已删除",
+    "mergeSuccess": "标签已合并"
+  }
+}

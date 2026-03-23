@@ -1,0 +1,20 @@
+{
+  "title": "Tags",
+  "noTags": "No tags",
+  "search": "Search tags",
+  "count": "{{count}} notes",
+  "actions": {
+    "rename": "Rename Tag",
+    "delete": "Delete Tag",
+    "merge": "Merge Tags"
+  },
+  "sort": {
+    "name": "By Name",
+    "count": "By Count"
+  },
+  "messages": {
+    "renameSuccess": "Tag renamed",
+    "deleteSuccess": "Tag deleted",
+    "mergeSuccess": "Tags merged"
+  }
+}

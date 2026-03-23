@@ -1,0 +1,60 @@
+{
+  "title": "编辑器",
+  "extensions": {
+    "livePreview": "实时预览",
+    "spellCheck": "拼写检查",
+    "vim": "Vim 模式",
+    "math": "数学公式",
+    "mermaid": "Mermaid 图表",
+    "footnotes": "脚注",
+    "tables": "表格",
+    "folding": "代码折叠",
+    "taskList": "任务列表",
+    "callouts": "提示框",
+    "highlight": "高亮",
+    "search": "查找替换"
+  },
+  "actions": {
+    "toggleLivePreview": "切换实时预览",
+    "toggleSpellCheck": "切换拼写检查",
+    "toggleVim": "切换 Vim 模式",
+    "insertMath": "插入数学公式",
+    "insertMermaid": "插入 Mermaid 图表",
+    "insertFootnote": "插入脚注",
+    "insertTable": "插入表格",
+    "formatTable": "格式化表格",
+    "foldAll": "折叠全部",
+    "unfoldAll": "展开全部"
+  },
+  "shortcuts": {
+    "bold": "粗体",
+    "italic": "斜体",
+    "code": "代码",
+    "link": "链接",
+    "heading": "标题",
+    "quote": "引用",
+    "list": "列表",
+    "task": "任务",
+    "table": "表格"
+  },
+  "status": {
+    "livePreviewEnabled": "实时预览已启用",
+    "livePreviewDisabled": "实时预览已禁用",
+    "spellCheckEnabled": "拼写检查已启用",
+    "spellCheckDisabled": "拼写检查已禁用",
+    "vimEnabled": "Vim 模式已启用",
+    "vimDisabled": "Vim 模式已禁用"
+  },
+  "calloutTypes": {
+    "note": "笔记",
+    "tip": "提示",
+    "warning": "警告",
+    "danger": "危险",
+    "info": "信息",
+    "todo": "待办",
+    "success": "成功",
+    "question": "问题",
+    "example": "示例",
+    "quote": "引用"
+  }
+}

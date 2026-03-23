@@ -1,0 +1,38 @@
+{
+  "title": "媒体管理",
+  "upload": "上传",
+  "delete": "删除",
+  "preview": "预览",
+  "insert": "插入",
+  "download": "下载",
+  "copy": "复制",
+  "rename": "重命名",
+  "filter": {
+    "all": "全部",
+    "images": "图片",
+    "videos": "视频",
+    "audio": "音频",
+    "documents": "文档"
+  },
+  "sort": {
+    "name": "按名称",
+    "date": "按日期",
+    "size": "按大小",
+    "type": "按类型"
+  },
+  "messages": {
+    "uploadSuccess": "上传成功",
+    "uploadFailed": "上传失败",
+    "deleteSuccess": "删除成功",
+    "deleteFailed": "删除失败",
+    "noFiles": "暂无文件",
+    "dragDropHint": "拖拽文件到此处上传"
+  },
+  "info": {
+    "name": "名称",
+    "size": "大小",
+    "type": "类型",
+    "date": "日期",
+    "dimensions": "尺寸"
+  }
+}

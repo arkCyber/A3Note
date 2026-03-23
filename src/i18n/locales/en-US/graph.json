@@ -1,0 +1,35 @@
+{
+  "title": "Graph View",
+  "localGraph": "Local Graph",
+  "globalGraph": "Global Graph",
+  "filters": {
+    "title": "Filters",
+    "tags": "Tags",
+    "folders": "Folders",
+    "depth": "Depth"
+  },
+  "display": {
+    "title": "Display",
+    "arrows": "Show Arrows",
+    "labels": "Show Labels",
+    "orphans": "Show Orphans",
+    "attachments": "Show Attachments"
+  },
+  "forces": {
+    "title": "Forces",
+    "centerForce": "Center Force",
+    "repelForce": "Repel Force",
+    "linkForce": "Link Force",
+    "linkDistance": "Link Distance"
+  },
+  "groups": {
+    "title": "Groups",
+    "tags": "By Tags",
+    "folders": "By Folders",
+    "none": "No Grouping"
+  },
+  "messages": {
+    "noNodes": "No nodes",
+    "loading": "Loading..."
+  }
+}

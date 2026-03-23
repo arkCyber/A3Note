@@ -1,0 +1,60 @@
+{
+  "title": "Editor",
+  "extensions": {
+    "livePreview": "Live Preview",
+    "spellCheck": "Spell Check",
+    "vim": "Vim Mode",
+    "math": "Math Formulas",
+    "mermaid": "Mermaid Diagrams",
+    "footnotes": "Footnotes",
+    "tables": "Tables",
+    "folding": "Code Folding",
+    "taskList": "Task Lists",
+    "callouts": "Callouts",
+    "highlight": "Highlight",
+    "search": "Find & Replace"
+  },
+  "actions": {
+    "toggleLivePreview": "Toggle Live Preview",
+    "toggleSpellCheck": "Toggle Spell Check",
+    "toggleVim": "Toggle Vim Mode",
+    "insertMath": "Insert Math Formula",
+    "insertMermaid": "Insert Mermaid Diagram",
+    "insertFootnote": "Insert Footnote",
+    "insertTable": "Insert Table",
+    "formatTable": "Format Table",
+    "foldAll": "Fold All",
+    "unfoldAll": "Unfold All"
+  },
+  "shortcuts": {
+    "bold": "Bold",
+    "italic": "Italic",
+    "code": "Code",
+    "link": "Link",
+    "heading": "Heading",
+    "quote": "Quote",
+    "list": "List",
+    "task": "Task",
+    "table": "Table"
+  },
+  "status": {
+    "livePreviewEnabled": "Live preview enabled",
+    "livePreviewDisabled": "Live preview disabled",
+    "spellCheckEnabled": "Spell check enabled",
+    "spellCheckDisabled": "Spell check disabled",
+    "vimEnabled": "Vim mode enabled",
+    "vimDisabled": "Vim mode disabled"
+  },
+  "calloutTypes": {
+    "note": "Note",
+    "tip": "Tip",
+    "warning": "Warning",
+    "danger": "Danger",
+    "info": "Info",
+    "todo": "Todo",
+    "success": "Success",
+    "question": "Question",
+    "example": "Example",
+    "quote": "Quote"
+  }
+}

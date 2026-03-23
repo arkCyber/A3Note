@@ -1,0 +1,35 @@
+{
+  "title": "关系图",
+  "localGraph": "局部图",
+  "globalGraph": "全局图",
+  "filters": {
+    "title": "过滤器",
+    "tags": "标签",
+    "folders": "文件夹",
+    "depth": "深度"
+  },
+  "display": {
+    "title": "显示",
+    "arrows": "显示箭头",
+    "labels": "显示标签",
+    "orphans": "显示孤立节点",
+    "attachments": "显示附件"
+  },
+  "forces": {
+    "title": "力导向",
+    "centerForce": "中心力",
+    "repelForce": "排斥力",
+    "linkForce": "连接力",
+    "linkDistance": "连接距离"
+  },
+  "groups": {
+    "title": "分组",
+    "tags": "按标签",
+    "folders": "按文件夹",
+    "none": "无分组"
+  },
+  "messages": {
+    "noNodes": "暂无节点",
+    "loading": "加载中..."
+  }
+}
