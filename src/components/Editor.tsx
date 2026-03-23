@@ -14,6 +14,12 @@ import { taskListExtension, taskListTheme } from "../extensions/taskListExtensio
 import { calloutExtension, calloutTheme } from "../extensions/calloutExtension";
 import { highlightExtension, highlightTheme } from "../extensions/highlightExtension";
 import { foldingExtension, foldingKeymap } from "../extensions/foldingExtension";
+import { vimExtension, vimTheme } from "../extensions/vimExtension";
+import { footnoteExtension, footnoteTheme } from "../extensions/footnoteExtension";
+import { mathExtension, mathTheme } from "../extensions/mathExtension";
+import { mermaidExtension, mermaidTheme } from "../extensions/mermaidExtension";
+import { enhancedSearchExtension, searchTheme } from "../extensions/searchExtension";
+import { tableExtension, tableTheme } from "../extensions/tableExtension";
 
 interface EditorProps {
   currentFile: FileItem | null;
@@ -359,6 +365,12 @@ export default function Editor({ currentFile, content, onContentChange, showTool
         calloutExtension,
         highlightExtension,
         foldingExtension,
+        footnoteExtension,
+        mathExtension,
+        mermaidExtension,
+        enhancedSearchExtension,
+        tableExtension,
+        // vimExtension, // Uncomment to enable Vim mode
         keymap.of([
           ...foldingKeymap,
           {
@@ -553,6 +565,12 @@ export default function Editor({ currentFile, content, onContentChange, showTool
         taskListTheme,
         calloutTheme,
         highlightTheme,
+        footnoteTheme,
+        mathTheme,
+        mermaidTheme,
+        searchTheme,
+        tableTheme,
+        // vimTheme, // Uncomment to enable Vim mode theme,
         EditorView.updateListener.of((update) => {
           if (update.docChanged) {
             const newContent = update.state.doc.toString();
