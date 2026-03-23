@@ -10,6 +10,7 @@ mod watcher;
 mod ai;
 mod ai_commands;
 mod semantic_commands;
+mod media_commands;
 
 use std::sync::Arc;
 
@@ -72,6 +73,12 @@ fn main() {
             semantic_commands::rag_query,
             semantic_commands::get_index_stats,
             semantic_commands::clear_index,
+            // Media commands
+            media_commands::save_media_file,
+            media_commands::read_media_file,
+            media_commands::delete_media_file,
+            media_commands::list_media_files,
+            media_commands::get_media_info,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

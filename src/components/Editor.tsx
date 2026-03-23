@@ -10,6 +10,10 @@ import MarkdownToolbar from "./MarkdownToolbar";
 import SemanticLinkSuggestion from "./SemanticLinkSuggestion";
 import { log } from "../utils/logger";
 import { ErrorHandler, ErrorSeverity } from "../utils/errorHandler";
+import { taskListExtension, taskListTheme } from "../extensions/taskListExtension";
+import { calloutExtension, calloutTheme } from "../extensions/calloutExtension";
+import { highlightExtension, highlightTheme } from "../extensions/highlightExtension";
+import { foldingExtension, foldingKeymap } from "../extensions/foldingExtension";
 
 interface EditorProps {
   currentFile: FileItem | null;
@@ -351,7 +355,12 @@ export default function Editor({ currentFile, content, onContentChange, showTool
         syntaxHighlighting(defaultHighlightStyle),
         EditorView.lineWrapping,
         headingPlugin,
+        taskListExtension,
+        calloutExtension,
+        highlightExtension,
+        foldingExtension,
         keymap.of([
+          ...foldingKeymap,
           {
             key: "Mod-b",
             run: () => { handleInsert("**", "**"); return true; },
@@ -541,6 +550,9 @@ export default function Editor({ currentFile, content, onContentChange, showTool
             color: "#616161"
           }
         }),
+        taskListTheme,
+        calloutTheme,
+        highlightTheme,
         EditorView.updateListener.of((update) => {
           if (update.docChanged) {
             const newContent = update.state.doc.toString();
