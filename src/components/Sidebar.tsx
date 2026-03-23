@@ -10,11 +10,28 @@ interface SidebarProps {
   onFileSelect: (file: FileItem) => void;
   onDeleteFile: (path: string) => void;
   onRefresh: () => void;
+  onCreateFile: (path: string) => void;
+  onCreateFolder: (path: string) => void;
+  onRename: (oldPath: string, newName: string) => void;
 }
 
-export default function Sidebar({ files, currentFile, onFileSelect, onDeleteFile, onRefresh }: SidebarProps) {
+export default function Sidebar({ files, currentFile, onFileSelect, onDeleteFile, onRefresh, onCreateFile, onCreateFolder, onRename }: SidebarProps) {
   const { t } = useTranslation('sidebar');
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; file: FileItem } | null>(null);
+
+  const handleNewFile = () => {
+    // Create default unnamed file immediately (Obsidian-style)
+    const timestamp = Date.now();
+    const fileName = `未命名-${timestamp}.md`;
+    onCreateFile(fileName);
+  };
+
+  const handleNewFolder = () => {
+    // Create default unnamed folder immediately (Obsidian-style)
+    const timestamp = Date.now();
+    const folderName = `未命名文件夹-${timestamp}`;
+    onCreateFolder(folderName);
+  };
 
   const handleContextMenu = (e: React.MouseEvent, file: FileItem) => {
     e.preventDefault();
@@ -28,20 +45,18 @@ export default function Sidebar({ files, currentFile, onFileSelect, onDeleteFile
           label: t('contextMenu.newFile'),
           icon: <FilePlus size={16} />,
           onClick: () => {
-            const fileName = prompt(t('prompts.enterFileName'));
-            if (fileName) {
-              console.log("Create file in:", file.path, fileName);
-            }
+            const timestamp = Date.now();
+            const fileName = `未命名-${timestamp}.md`;
+            onCreateFile(`${file.path}/${fileName}`);
           },
         },
         {
           label: t('contextMenu.newFolder'),
           icon: <FolderPlus size={16} />,
           onClick: () => {
-            const folderName = prompt(t('prompts.enterFolderName'));
-            if (folderName) {
-              console.log("Create folder in:", file.path, folderName);
-            }
+            const timestamp = Date.now();
+            const folderName = `未命名文件夹-${timestamp}`;
+            onCreateFolder(`${file.path}/${folderName}`);
           },
         },
         { separator: true } as ContextMenuItem,
@@ -51,14 +66,18 @@ export default function Sidebar({ files, currentFile, onFileSelect, onDeleteFile
           onClick: () => {
             const newName = prompt(t('prompts.enterNewName'), file.name);
             if (newName && newName !== file.name) {
-              console.log("Rename folder:", file.path, "to", newName);
+              onRename(file.path, newName);
             }
           },
         },
         {
           label: t('contextMenu.delete'),
           icon: <Trash2 size={16} />,
-          onClick: () => onDeleteFile(file.path),
+          onClick: () => {
+            if (confirm(t('prompts.confirmDelete'))) {
+              onDeleteFile(file.path);
+            }
+          },
           danger: true,
         },
       ];
@@ -76,7 +95,7 @@ export default function Sidebar({ files, currentFile, onFileSelect, onDeleteFile
           onClick: () => {
             const newName = prompt(t('prompts.enterNewName'), file.name);
             if (newName && newName !== file.name) {
-              console.log("Rename file:", file.path, "to", newName);
+              onRename(file.path, newName);
             }
           },
         },
@@ -91,7 +110,11 @@ export default function Sidebar({ files, currentFile, onFileSelect, onDeleteFile
         {
           label: t('contextMenu.delete'),
           icon: <Trash2 size={16} />,
-          onClick: () => onDeleteFile(file.path),
+          onClick: () => {
+            if (confirm(t('prompts.confirmDelete'))) {
+              onDeleteFile(file.path);
+            }
+          },
           danger: true,
         },
       ];
@@ -100,16 +123,38 @@ export default function Sidebar({ files, currentFile, onFileSelect, onDeleteFile
 
   return (
     <div className="w-64 bg-secondary border-r border-border flex flex-col">
-      <div className="p-4 border-b border-border flex items-center justify-between">
-        <h2 className="text-sm font-semibold">{t('title')}</h2>
-        <button
-          onClick={onRefresh}
-          className="p-1 hover:bg-background rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          title={t('refresh')}
-          aria-label={t('refresh')}
-        >
-          <RefreshCw size={14} />
-        </button>
+      <div className="p-3 border-b border-border">
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-sm font-semibold">{t('title')}</h2>
+          <button
+            onClick={onRefresh}
+            className="p-1 hover:bg-background rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            title={t('refresh')}
+            aria-label={t('refresh')}
+          >
+            <RefreshCw size={14} />
+          </button>
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={handleNewFile}
+            className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 text-xs bg-primary/10 hover:bg-primary/20 text-primary rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            title={t('contextMenu.newFile')}
+            aria-label={t('contextMenu.newFile')}
+          >
+            <FilePlus size={14} />
+            <span>{t('file')}</span>
+          </button>
+          <button
+            onClick={handleNewFolder}
+            className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 text-xs bg-primary/10 hover:bg-primary/20 text-primary rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            title={t('contextMenu.newFolder')}
+            aria-label={t('contextMenu.newFolder')}
+          >
+            <FolderPlus size={14} />
+            <span>{t('folder')}</span>
+          </button>
+        </div>
       </div>
       <div className="flex-1 overflow-y-auto p-2">
         {files.length === 0 ? (
@@ -158,13 +203,8 @@ function FileTreeItem({ file, currentFile, onFileSelect, onDeleteFile, onContext
   const handleClick = () => {
     if (file.isDirectory) {
       setExpanded(!expanded);
-    }
-  };
-
-  const handleDoubleClick = () => {
-    if (file.isDirectory) {
-      setExpanded(!expanded);
     } else {
+      // Single click to open file (Obsidian-style)
       onFileSelect(file);
     }
   };
@@ -183,12 +223,11 @@ function FileTreeItem({ file, currentFile, onFileSelect, onDeleteFile, onContext
   return (
     <div>
       <div
-        className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-background/50 transition-colors group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-          isActive ? "bg-primary/20" : ""
+        className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-accent/10 hover:shadow-sm transition-all duration-150 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+          isActive ? "bg-primary/20 border border-primary/30" : ""
         }`}
         style={{ paddingLeft: `${level * 16 + 8}px` }}
         onClick={handleClick}
-        onDoubleClick={handleDoubleClick}
         onContextMenu={handleContextMenu}
         tabIndex={0}
         role="button"
@@ -197,23 +236,23 @@ function FileTreeItem({ file, currentFile, onFileSelect, onDeleteFile, onContext
         {file.isDirectory ? (
           <>
             {expanded ? (
-              <ChevronDown size={14} className="text-foreground/70" />
+              <ChevronDown size={14} className="text-foreground/70 group-hover:text-foreground transition-colors" />
             ) : (
-              <ChevronRight size={14} className="text-foreground/70" />
+              <ChevronRight size={14} className="text-foreground/70 group-hover:text-foreground transition-colors" />
             )}
             {expanded ? (
-              <FolderOpen size={16} className="text-accent" />
+              <FolderOpen size={16} className="text-accent group-hover:scale-110 transition-transform" />
             ) : (
-              <Folder size={16} className="text-accent" />
+              <Folder size={16} className="text-accent group-hover:scale-110 transition-transform" />
             )}
           </>
         ) : (
           <>
             <div className="w-3.5" />
-            <File size={16} className="text-foreground/70" />
+            <File size={16} className="text-foreground/70 group-hover:text-primary group-hover:scale-110 transition-all" />
           </>
         )}
-        <span className="text-sm truncate flex-1">{file.name}</span>
+        <span className="text-sm truncate flex-1 group-hover:text-foreground transition-colors">{file.name}</span>
         {!file.isDirectory && (
           <button
             onClick={handleDelete}

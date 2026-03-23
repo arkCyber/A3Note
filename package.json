@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@codemirror/lang-markdown": "^6.2.4",
+    "@codemirror/language": "^6.12.2",
     "@codemirror/state": "^6.4.0",
     "@codemirror/view": "^6.23.0",
     "@tailwindcss/typography": "^0.5.10",
@@ -33,6 +34,7 @@
     "codemirror": "^6.0.1",
     "dompurify": "^3.0.8",
     "i18next": "^25.9.0",
+    "lodash": "^4.17.21",
     "lucide-react": "^0.344.0",
     "marked": "^11.1.1",
     "react": "^18.2.0",
@@ -46,6 +48,7 @@
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.5.1",
     "@types/dompurify": "^3.0.5",
+    "@types/lodash": "^4.14.202",
     "@types/marked": "^6.0.0",
     "@types/node": "^20.10.0",
     "@types/react": "^18.2.15",

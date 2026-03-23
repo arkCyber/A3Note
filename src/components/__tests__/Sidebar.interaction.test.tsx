@@ -20,6 +20,9 @@ describe('Sidebar Interactions', () => {
   const mockOnFileSelect = vi.fn();
   const mockOnDeleteFile = vi.fn();
   const mockOnRefresh = vi.fn();
+  const mockOnCreateFile = vi.fn();
+  const mockOnCreateFolder = vi.fn();
+  const mockOnRename = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -34,6 +37,9 @@ describe('Sidebar Interactions', () => {
           onFileSelect={mockOnFileSelect}
           onDeleteFile={mockOnDeleteFile}
           onRefresh={mockOnRefresh}
+          onCreateFile={mockOnCreateFile}
+          onCreateFolder={mockOnCreateFolder}
+          onRename={mockOnRename}
         />
       );
 
@@ -54,6 +60,9 @@ describe('Sidebar Interactions', () => {
           onFileSelect={mockOnFileSelect}
           onDeleteFile={mockOnDeleteFile}
           onRefresh={mockOnRefresh}
+          onCreateFile={mockOnCreateFile}
+          onCreateFolder={mockOnCreateFolder}
+          onRename={mockOnRename}
         />
       );
 
@@ -71,6 +80,9 @@ describe('Sidebar Interactions', () => {
           onFileSelect={mockOnFileSelect}
           onDeleteFile={mockOnDeleteFile}
           onRefresh={mockOnRefresh}
+          onCreateFile={mockOnCreateFile}
+          onCreateFolder={mockOnCreateFolder}
+          onRename={mockOnRename}
         />
       );
 
@@ -88,6 +100,9 @@ describe('Sidebar Interactions', () => {
           onFileSelect={mockOnFileSelect}
           onDeleteFile={mockOnDeleteFile}
           onRefresh={mockOnRefresh}
+          onCreateFile={mockOnCreateFile}
+          onCreateFolder={mockOnCreateFolder}
+          onRename={mockOnRename}
         />
       );
 
@@ -108,6 +123,9 @@ describe('Sidebar Interactions', () => {
           onFileSelect={mockOnFileSelect}
           onDeleteFile={mockOnDeleteFile}
           onRefresh={mockOnRefresh}
+          onCreateFile={mockOnCreateFile}
+          onCreateFolder={mockOnCreateFolder}
+          onRename={mockOnRename}
         />
       );
 
@@ -128,6 +146,9 @@ describe('Sidebar Interactions', () => {
           onFileSelect={mockOnFileSelect}
           onDeleteFile={mockOnDeleteFile}
           onRefresh={mockOnRefresh}
+          onCreateFile={mockOnCreateFile}
+          onCreateFolder={mockOnCreateFolder}
+          onRename={mockOnRename}
         />
       );
 
@@ -149,6 +170,9 @@ describe('Sidebar Interactions', () => {
           onFileSelect={mockOnFileSelect}
           onDeleteFile={mockOnDeleteFile}
           onRefresh={mockOnRefresh}
+          onCreateFile={mockOnCreateFile}
+          onCreateFolder={mockOnCreateFolder}
+          onRename={mockOnRename}
         />
       );
 
@@ -170,6 +194,9 @@ describe('Sidebar Interactions', () => {
           onFileSelect={mockOnFileSelect}
           onDeleteFile={mockOnDeleteFile}
           onRefresh={mockOnRefresh}
+          onCreateFile={mockOnCreateFile}
+          onCreateFolder={mockOnCreateFolder}
+          onRename={mockOnRename}
         />
       );
 
@@ -185,6 +212,9 @@ describe('Sidebar Interactions', () => {
           onFileSelect={mockOnFileSelect}
           onDeleteFile={mockOnDeleteFile}
           onRefresh={mockOnRefresh}
+          onCreateFile={mockOnCreateFile}
+          onCreateFolder={mockOnCreateFolder}
+          onRename={mockOnRename}
         />
       );
 
@@ -202,6 +232,9 @@ describe('Sidebar Interactions', () => {
           onFileSelect={mockOnFileSelect}
           onDeleteFile={mockOnDeleteFile}
           onRefresh={mockOnRefresh}
+          onCreateFile={mockOnCreateFile}
+          onCreateFolder={mockOnCreateFolder}
+          onRename={mockOnRename}
         />
       );
 
@@ -217,6 +250,9 @@ describe('Sidebar Interactions', () => {
           onFileSelect={mockOnFileSelect}
           onDeleteFile={mockOnDeleteFile}
           onRefresh={mockOnRefresh}
+          onCreateFile={mockOnCreateFile}
+          onCreateFolder={mockOnCreateFolder}
+          onRename={mockOnRename}
         />
       );
 
@@ -234,6 +270,9 @@ describe('Sidebar Interactions', () => {
           onFileSelect={mockOnFileSelect}
           onDeleteFile={mockOnDeleteFile}
           onRefresh={mockOnRefresh}
+          onCreateFile={mockOnCreateFile}
+          onCreateFolder={mockOnCreateFolder}
+          onRename={mockOnRename}
         />
       );
 
@@ -249,6 +288,9 @@ describe('Sidebar Interactions', () => {
           onFileSelect={mockOnFileSelect}
           onDeleteFile={mockOnDeleteFile}
           onRefresh={mockOnRefresh}
+          onCreateFile={mockOnCreateFile}
+          onCreateFolder={mockOnCreateFolder}
+          onRename={mockOnRename}
         />
       );
 
@@ -263,6 +305,9 @@ describe('Sidebar Interactions', () => {
           onFileSelect={mockOnFileSelect}
           onDeleteFile={mockOnDeleteFile}
           onRefresh={mockOnRefresh}
+          onCreateFile={mockOnCreateFile}
+          onCreateFolder={mockOnCreateFolder}
+          onRename={mockOnRename}
         />
       );
 
@@ -280,6 +325,9 @@ describe('Sidebar Interactions', () => {
           onFileSelect={mockOnFileSelect}
           onDeleteFile={mockOnDeleteFile}
           onRefresh={mockOnRefresh}
+          onCreateFile={mockOnCreateFile}
+          onCreateFolder={mockOnCreateFolder}
+          onRename={mockOnRename}
         />
       );
 
@@ -295,6 +343,9 @@ describe('Sidebar Interactions', () => {
           onFileSelect={mockOnFileSelect}
           onDeleteFile={mockOnDeleteFile}
           onRefresh={mockOnRefresh}
+          onCreateFile={mockOnCreateFile}
+          onCreateFolder={mockOnCreateFolder}
+          onRename={mockOnRename}
         />
       );
 

@@ -1,11 +1,12 @@
+import { ReactNode } from "react";
 import { FileItem } from "../types";
+import MarkdownStats from "./MarkdownStats";
 
 interface StatusBarProps {
   currentFile: FileItem | null;
   content: string;
-  wordCount?: number;
-  lineCount?: number;
   cursorPosition?: { line: number; column: number };
+  children?: ReactNode;
 }
 
 export default function StatusBar({
@@ -13,11 +14,6 @@ export default function StatusBar({
   content,
   cursorPosition,
 }: StatusBarProps) {
-  // Calculate statistics
-  const wordCount = content.trim() ? content.trim().split(/\s+/).length : 0;
-  const lineCount = content.split('\n').length;
-  const charCount = content.length;
-
   return (
     <div className="h-6 bg-secondary border-t border-border flex items-center px-4 text-xs text-muted">
       <div className="flex items-center gap-4">
@@ -28,27 +24,9 @@ export default function StatusBar({
               <span>{currentFile.name}</span>
             </span>
             <span className="text-border">|</span>
+            <MarkdownStats content={content} />
           </>
         )}
-        
-        <span className="flex items-center gap-1">
-          <span className="text-foreground/50">Words:</span>
-          <span>{wordCount}</span>
-        </span>
-        
-        <span className="text-border">|</span>
-        
-        <span className="flex items-center gap-1">
-          <span className="text-foreground/50">Lines:</span>
-          <span>{lineCount}</span>
-        </span>
-        
-        <span className="text-border">|</span>
-        
-        <span className="flex items-center gap-1">
-          <span className="text-foreground/50">Characters:</span>
-          <span>{charCount}</span>
-        </span>
 
         {cursorPosition && (
           <>

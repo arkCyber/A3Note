@@ -21,6 +21,13 @@ export interface EditorState {
 export interface SearchResult {
   path: string;
   line: number;
-  column: number;
+  column?: number;
   snippet: string;
+}
+
+export interface WorkspaceState {
+  path: string | null;
+  files: FileItem[];
+  loading: boolean;
+  error: string | null;
 }

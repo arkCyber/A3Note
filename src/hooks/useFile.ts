@@ -2,6 +2,24 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { tauriApi } from "../api/tauri";
 import { FileItem } from "../types";
 
+// Extract title from first line (Obsidian-style)
+function extractTitleFromFirstLine(content: string): string | null {
+  const lines = content.split('\n');
+  if (lines.length === 0) return null;
+
+  const firstLine = lines[0].trim();
+  let title: string | null = null;
+
+  // Check if first line is a markdown heading
+  if (firstLine.match(/^#+\s+/)) {
+    title = firstLine.replace(/^#+\s+/, '').trim() || null;
+  } else if (firstLine.length > 0 && firstLine.length < 100) {
+    title = firstLine;
+  }
+
+  return title;
+}
+
 interface FileState {
   currentFile: FileItem | null;
   content: string;
@@ -10,7 +28,7 @@ interface FileState {
   error: string | null;
 }
 
-export function useFile() {
+export function useFile(onTitleChange?: (oldPath: string, newTitle: string) => void) {
   const [state, setState] = useState<FileState>({
     currentFile: null,
     content: "",
@@ -20,6 +38,7 @@ export function useFile() {
   });
 
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastTitleRef = useRef<string | null>(null);
 
   // Open and load file
   const openFile = useCallback(async (file: FileItem) => {
@@ -30,14 +49,21 @@ export function useFile() {
     setState((prev) => ({ ...prev, error: null }));
     try {
       const fileContent = await tauriApi.readFile(file.path);
+      const content = fileContent?.content || '';
+      
+      // Extract title from first line (Obsidian-style)
+      const title = extractTitleFromFirstLine(content);
+      lastTitleRef.current = title;
+      
       setState({
         currentFile: file,
-        content: fileContent?.content || '',
+        content,
         isDirty: false,
         isSaving: false,
         error: null,
       });
     } catch (error) {
+      console.error('Error loading file:', error);
       setState((prev) => ({
         ...prev,
         error: error instanceof Error ? error.message : "Failed to open file",
@@ -73,6 +99,20 @@ export function useFile() {
         isDirty: prev.content !== newContent,
       }));
 
+      // Check for title change (Obsidian-style: first line is filename)
+      const newTitle = extractTitleFromFirstLine(newContent);
+      if (newTitle && newTitle !== lastTitleRef.current && state.currentFile) {
+        const oldTitle = lastTitleRef.current;
+        lastTitleRef.current = newTitle;
+        
+        // Only trigger rename if title actually changed and not "未命名"
+        if (oldTitle !== newTitle && !newTitle.startsWith('未命名') && onTitleChange) {
+          onTitleChange(state.currentFile.path, newTitle);
+        }
+      } else if (!newTitle) {
+        lastTitleRef.current = null;
+      }
+
       // Clear existing timeout
       if (autoSaveTimeoutRef.current) {
         clearTimeout(autoSaveTimeoutRef.current);
@@ -87,7 +127,7 @@ export function useFile() {
         }
       }, 2000);
     },
-    [state.currentFile]
+    [state.currentFile, onTitleChange]
   );
 
   // Create new file

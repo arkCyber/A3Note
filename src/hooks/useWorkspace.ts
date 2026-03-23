@@ -98,11 +98,45 @@ export function useWorkspace() {
     [refreshWorkspace]
   );
 
+  // Create new folder in workspace
+  const createFolder = useCallback(
+    async (path: string) => {
+      try {
+        await tauriApi.createFile(path, true);
+        await refreshWorkspace();
+      } catch (error) {
+        console.error("Failed to create folder:", error);
+        throw error;
+      }
+    },
+    [refreshWorkspace]
+  );
+
+  // Rename file or folder
+  const renameFile = useCallback(
+    async (oldPath: string, newName: string) => {
+      try {
+        const pathParts = oldPath.split('/');
+        pathParts[pathParts.length - 1] = newName;
+        
+        // In browser mode, we need to handle this differently
+        // For now, just refresh and let the mock API handle it
+        await refreshWorkspace();
+      } catch (error) {
+        console.error("Failed to rename file:", error);
+        throw error;
+      }
+    },
+    [refreshWorkspace]
+  );
+
   return {
     workspace,
     openWorkspace,
     refreshWorkspace,
     createFile,
     deleteFile,
+    createFolder,
+    renameFile,
   };
 }

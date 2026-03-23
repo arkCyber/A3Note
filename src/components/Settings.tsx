@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { X, Save, RotateCcw } from 'lucide-react';
+import { X, Save, RotateCcw, Cloud } from 'lucide-react';
 import { useTheme, Theme } from '../hooks/useTheme';
 import { useTranslation } from 'react-i18next';
 
 interface SettingsProps {
   onClose: () => void;
   onOpenPlugins?: () => void;
+  onOpenSync?: () => void;
 }
 
 interface AppSettings {
@@ -28,7 +29,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   tabSize: 2,
 };
 
-export default function Settings({ onClose, onOpenPlugins: _onOpenPlugins }: SettingsProps) {
+export default function Settings({ onClose, onOpenPlugins: _onOpenPlugins, onOpenSync }: SettingsProps) {
   const { t, i18n } = useTranslation('settings');
   const { theme, setTheme } = useTheme();
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
@@ -242,21 +243,39 @@ export default function Settings({ onClose, onOpenPlugins: _onOpenPlugins }: Set
             {t('reset')}
           </button>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 border-b border-border">
             <button
-              onClick={onClose}
-              className="px-4 py-2 text-sm hover:bg-background rounded transition-colors"
+              onClick={() => setActiveTab('general')}
+              className={`px-4 py-2 ${
+                activeTab === 'general'
+                  ? 'border-b-2 border-primary text-primary'
+                  : 'text-foreground/60 hover:text-foreground'
+              }`}
             >
-              {t('common:cancel', { defaultValue: 'Cancel' })}
+              {t('tabs.general')}
             </button>
             <button
-              onClick={handleSave}
-              disabled={!hasChanges}
-              className="flex items-center gap-2 px-4 py-2 text-sm bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed rounded transition-colors"
+              onClick={() => setActiveTab('editor')}
+              className={`px-4 py-2 ${
+                activeTab === 'editor'
+                  ? 'border-b-2 border-primary text-primary'
+                  : 'text-foreground/60 hover:text-foreground'
+              }`}
             >
-              <Save size={16} />
-              {t('save')}
+              {t('tabs.editor')}
             </button>
+            {onOpenSync && (
+              <button
+                onClick={() => {
+                  onClose();
+                  onOpenSync();
+                }}
+                className="px-4 py-2 text-foreground/60 hover:text-foreground flex items-center gap-2"
+              >
+                <Cloud className="w-4 h-4" />
+                Sync
+              </button>
+            )}
           </div>
         </div>
       </div>
