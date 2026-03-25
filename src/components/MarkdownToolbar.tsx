@@ -1,6 +1,8 @@
 import { 
   Bold, 
   Italic, 
+  Strikethrough,
+  Highlighter,
   Heading1, 
   Heading2, 
   Heading3, 
@@ -8,13 +10,16 @@ import {
   Image, 
   Video,
   Music,
-  Code, 
+  Code,
+  Code2,
   Quote, 
   List, 
   ListOrdered,
   Table,
   CheckSquare,
-  Minus
+  Minus,
+  Link2,
+  AlertCircle
 } from "lucide-react";
 
 interface MarkdownToolbarProps {
@@ -32,6 +37,16 @@ export default function MarkdownToolbar({ onInsert }: MarkdownToolbarProps) {
       icon: Italic,
       label: "Italic (Cmd+I)",
       action: () => onInsert("*", "*"),
+    },
+    {
+      icon: Strikethrough,
+      label: "Strikethrough (Cmd+Shift+X)",
+      action: () => onInsert("~~", "~~"),
+    },
+    {
+      icon: Highlighter,
+      label: "Highlight (Cmd+Shift+H)",
+      action: () => onInsert("==", "=="),
     },
     { type: "separator" },
     {
@@ -56,6 +71,11 @@ export default function MarkdownToolbar({ onInsert }: MarkdownToolbarProps) {
       action: () => onInsert("[", "](url)"),
     },
     {
+      icon: Link2,
+      label: "Wikilink ([[]]) (Cmd+Shift+K)",
+      action: () => onInsert("[[", "]]"),
+    },
+    {
       icon: Image,
       label: "Image",
       action: () => onInsert("![", "](url)"),
@@ -75,11 +95,21 @@ export default function MarkdownToolbar({ onInsert }: MarkdownToolbarProps) {
       label: "Code (Cmd+`)",
       action: () => onInsert("`", "`"),
     },
+    {
+      icon: Code2,
+      label: "Code Block (Cmd+Shift+`)",
+      action: () => onInsert("```\n", "\n```"),
+    },
     { type: "separator" },
     {
       icon: Quote,
       label: "Quote",
       action: () => onInsert("> ", ""),
+    },
+    {
+      icon: AlertCircle,
+      label: "Callout",
+      action: () => onInsert("> [!note]\n> ", ""),
     },
     {
       icon: List,

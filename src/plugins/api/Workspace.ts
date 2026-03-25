@@ -7,9 +7,21 @@ import { TFile } from './Vault';
 import { RibbonAction } from '../types/plugin';
 
 export interface WorkspaceLeaf {
+  id: string;
   view: any;
+  parent: WorkspaceSplit | null;
+  pinned: boolean;
   getViewState(): any;
   setViewState(state: any): Promise<void>;
+  detach(): void;
+  openFile(file: TFile, state?: any): Promise<void>;
+}
+
+export interface WorkspaceSplit {
+  type: 'split';
+  direction: 'horizontal' | 'vertical';
+  children: (WorkspaceLeaf | WorkspaceSplit)[];
+  parent: WorkspaceSplit | null;
 }
 
 export class Workspace {
@@ -17,6 +29,21 @@ export class Workspace {
   private viewTypes: Map<string, any> = new Map();
   private ribbonIcons: RibbonAction[] = [];
   private statusBarItems: HTMLElement[] = [];
+  private leaves: WorkspaceLeaf[] = [];
+  private activeLeaf: WorkspaceLeaf | null = null;
+  private leafIdCounter = 0;
+  
+  // Split containers
+  public leftSplit: WorkspaceSplit;
+  public rightSplit: WorkspaceSplit;
+  public rootSplit: WorkspaceSplit;
+  
+  constructor() {
+    // Initialize splits
+    this.leftSplit = this.createSplit('vertical', null);
+    this.rightSplit = this.createSplit('vertical', null);
+    this.rootSplit = this.createSplit('horizontal', null);
+  }
   
   /**
    * Get the currently active file
@@ -34,47 +61,132 @@ export class Workspace {
   }
   
   /**
-   * Get active view
+   * Get active view of specific type
    */
-  getActiveViewOfType(_type: string): any {
-    // Return the active view of specified type
+  getActiveViewOfType<T>(type: string): T | null {
+    if (!this.activeLeaf) return null;
+    
+    const viewState = this.activeLeaf.getViewState();
+    if (viewState && viewState.type === type) {
+      return this.activeLeaf.view as T;
+    }
+    
     return null;
   }
   
   /**
-   * Get leaf by type
+   * Get all leaves of specific type
    */
-  getLeavesOfType(_type: string): WorkspaceLeaf[] {
-    // Return all leaves of specified type
-    return [];
+  getLeavesOfType(type: string): WorkspaceLeaf[] {
+    return this.leaves.filter(leaf => {
+      const viewState = leaf.getViewState();
+      return viewState && viewState.type === type;
+    });
   }
   
   /**
    * Get most recent leaf
    */
   getMostRecentLeaf(): WorkspaceLeaf | null {
-    return null;
+    return this.activeLeaf;
   }
   
   /**
-   * Get left split
+   * Get or create leaf
    */
-  getLeftLeaf(_split: boolean): WorkspaceLeaf {
-    return {} as WorkspaceLeaf;
+  getLeaf(newLeaf: boolean = false): WorkspaceLeaf {
+    if (newLeaf || !this.activeLeaf) {
+      return this.createLeaf(this.rootSplit);
+    }
+    return this.activeLeaf;
   }
   
   /**
-   * Get right split
+   * Get unpinned leaf
    */
-  getRightLeaf(_split: boolean): WorkspaceLeaf {
-    return {} as WorkspaceLeaf;
+  getUnpinnedLeaf(): WorkspaceLeaf {
+    const unpinned = this.leaves.find(leaf => !leaf.pinned);
+    if (unpinned) return unpinned;
+    
+    return this.createLeaf(this.rootSplit);
   }
   
   /**
-   * Open a file
+   * Get left split leaf
    */
-  async openLinkText(_linktext: string, _sourcePath: string, _newLeaf?: boolean): Promise<void> {
-    // Implementation to open a file by link text
+  getLeftLeaf(split: boolean): WorkspaceLeaf {
+    const existing = this.findLeafInSplit(this.leftSplit);
+    if (existing && !split) return existing;
+    
+    return this.createLeaf(this.leftSplit);
+  }
+  
+  /**
+   * Get right split leaf
+   */
+  getRightLeaf(split: boolean): WorkspaceLeaf {
+    const existing = this.findLeafInSplit(this.rightSplit);
+    if (existing && !split) return existing;
+    
+    return this.createLeaf(this.rightSplit);
+  }
+  
+  /**
+   * Split active leaf
+   */
+  splitActiveLeaf(direction: 'vertical' | 'horizontal' = 'vertical'): WorkspaceLeaf {
+    if (!this.activeLeaf) {
+      return this.createLeaf(this.rootSplit);
+    }
+    
+    const parent = this.activeLeaf.parent;
+    if (!parent) {
+      return this.createLeaf(this.rootSplit);
+    }
+    
+    // Create new split if needed
+    if (parent.direction !== direction) {
+      const newSplit = this.createSplit(direction, parent);
+      const index = parent.children.indexOf(this.activeLeaf);
+      parent.children[index] = newSplit;
+      newSplit.children.push(this.activeLeaf);
+      this.activeLeaf.parent = newSplit;
+    }
+    
+    // Create new leaf in same split
+    const newLeaf = this.createLeaf(this.activeLeaf.parent || this.rootSplit);
+    return newLeaf;
+  }
+  
+  /**
+   * Open a file by link text
+   */
+  async openLinkText(
+    linktext: string,
+    sourcePath: string,
+    newLeaf: boolean = false
+  ): Promise<void> {
+    // Resolve link to file path
+    // In real implementation, would use LinkResolver.resolveLink(linktext, sourcePath)
+    const filePath = linktext.replace(/\.md$/, '') + '.md';
+    
+    const leaf = newLeaf ? this.createLeaf(this.rootSplit) : this.getLeaf();
+    
+    // Create mock file
+    const file: TFile = {
+      path: filePath,
+      name: filePath.split('/').pop() || '',
+      basename: filePath.split('/').pop()?.replace(/\.md$/, '') || '',
+      extension: 'md',
+      stat: {
+        ctime: Date.now(),
+        mtime: Date.now(),
+        size: 0,
+      },
+    };
+    
+    await leaf.openFile(file);
+    this.setActiveLeaf(leaf);
   }
   
   /**
@@ -128,15 +240,21 @@ export class Workspace {
   }
   
   /**
-   * Trigger workspace event
+   * Listen for workspace events
    */
   on(event: string, callback: (...args: any[]) => void): void {
-    // Event handling implementation
     window.addEventListener(`workspace:${event}`, callback as EventListener);
   }
   
   /**
-   * Trigger event
+   * Remove event listener
+   */
+  off(event: string, callback: (...args: any[]) => void): void {
+    window.removeEventListener(`workspace:${event}`, callback as EventListener);
+  }
+  
+  /**
+   * Trigger workspace event
    */
   trigger(event: string, ...args: any[]): void {
     const customEvent = new CustomEvent(`workspace:${event}`, { detail: args });
@@ -164,14 +282,114 @@ export class Workspace {
   /**
    * Iterate all leaves
    */
-  iterateAllLeaves(_callback: (leaf: WorkspaceLeaf) => void): void {
-    // Iterate through all workspace leaves
+  iterateAllLeaves(callback: (leaf: WorkspaceLeaf) => void): void {
+    this.leaves.forEach(callback);
   }
   
   /**
    * Iterate root leaves
    */
-  iterateRootLeaves(_callback: (leaf: WorkspaceLeaf) => void): void {
-    // Iterate through root leaves
+  iterateRootLeaves(callback: (leaf: WorkspaceLeaf) => void): void {
+    this.iterateSplitLeaves(this.rootSplit, callback);
+  }
+  
+  /**
+   * Iterate leaves in a split
+   */
+  private iterateSplitLeaves(split: WorkspaceSplit, callback: (leaf: WorkspaceLeaf) => void): void {
+    for (const child of split.children) {
+      if ('type' in child && child.type === 'split') {
+        this.iterateSplitLeaves(child, callback);
+      } else {
+        callback(child as WorkspaceLeaf);
+      }
+    }
+  }
+  
+  /**
+   * Create a new leaf
+   */
+  private createLeaf(parent: WorkspaceSplit): WorkspaceLeaf {
+    const leaf: WorkspaceLeaf = {
+      id: `leaf-${this.leafIdCounter++}`,
+      view: null,
+      parent,
+      pinned: false,
+      getViewState: () => ({ type: 'empty' }),
+      setViewState: async (state: any) => {
+        leaf.view = state;
+      },
+      detach: () => {
+        this.detachLeaf(leaf);
+      },
+      openFile: async (file: TFile, state?: any) => {
+        this.setActiveFile(file);
+        await leaf.setViewState({ type: 'markdown', file, ...state });
+      },
+    };
+    
+    this.leaves.push(leaf);
+    parent.children.push(leaf);
+    
+    return leaf;
+  }
+  
+  /**
+   * Create a new split
+   */
+  private createSplit(
+    direction: 'horizontal' | 'vertical',
+    parent: WorkspaceSplit | null
+  ): WorkspaceSplit {
+    return {
+      type: 'split',
+      direction,
+      children: [],
+      parent,
+    };
+  }
+  
+  /**
+   * Detach a leaf
+   */
+  private detachLeaf(leaf: WorkspaceLeaf): void {
+    const index = this.leaves.indexOf(leaf);
+    if (index > -1) {
+      this.leaves.splice(index, 1);
+    }
+    
+    if (leaf.parent) {
+      const childIndex = leaf.parent.children.indexOf(leaf);
+      if (childIndex > -1) {
+        leaf.parent.children.splice(childIndex, 1);
+      }
+    }
+    
+    if (this.activeLeaf === leaf) {
+      this.activeLeaf = this.leaves[0] || null;
+    }
+  }
+  
+  /**
+   * Set active leaf
+   */
+  private setActiveLeaf(leaf: WorkspaceLeaf): void {
+    this.activeLeaf = leaf;
+    this.trigger('active-leaf-change', leaf);
+  }
+  
+  /**
+   * Find any leaf in split
+   */
+  private findLeafInSplit(split: WorkspaceSplit): WorkspaceLeaf | null {
+    for (const child of split.children) {
+      if ('type' in child && child.type === 'split') {
+        const found = this.findLeafInSplit(child);
+        if (found) return found;
+      } else {
+        return child as WorkspaceLeaf;
+      }
+    }
+    return null;
   }
 }

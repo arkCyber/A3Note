@@ -1,0 +1,402 @@
+/**
+ * Plugin API Component Styles
+ * Styles for Notice, Modal, and other plugin UI components
+ */
+
+/* Notice Container */
+.notice-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+/* Notice */
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 300px;
+  max-width: 500px;
+  padding: 12px 16px;
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notice-show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.notice-hide {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.notice-content {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-normal);
+}
+
+.notice-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.notice-close:hover {
+  color: var(--text-normal);
+}
+
+/* Notice Variants */
+.notice-success {
+  border-left: 3px solid #4caf50;
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.notice-error {
+  border-left: 3px solid #f44336;
+  background: rgba(244, 67, 54, 0.1);
+}
+
+.notice-warning {
+  border-left: 3px solid #ff9800;
+  background: rgba(255, 152, 0, 0.1);
+}
+
+.notice-info {
+  border-left: 3px solid #2196f3;
+  background: rgba(33, 150, 243, 0.1);
+}
+
+/* Modal Container (Backdrop) */
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.modal-container.modal-show {
+  opacity: 1;
+}
+
+.modal-container.modal-hide {
+  opacity: 0;
+}
+
+/* Modal */
+.modal {
+  background: var(--background-primary);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.9);
+  transition: transform 0.3s;
+  outline: none;
+}
+
+.modal-container.modal-show .modal {
+  transform: scale(1);
+}
+
+.modal-container.modal-hide .modal {
+  transform: scale(0.9);
+}
+
+/* Modal Title */
+.modal-title {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-normal);
+}
+
+/* Modal Content */
+.modal-content {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Modal Close Button */
+.modal-close-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.modal-close-button:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+/* Modal Input */
+.modal-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 4px;
+  background: var(--background-primary);
+  color: var(--text-normal);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.modal-input:focus {
+  border-color: var(--interactive-accent);
+}
+
+/* Modal Suggestions */
+.modal-suggestions {
+  margin-top: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 4px;
+}
+
+.modal-suggestion {
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.modal-suggestion:last-child {
+  border-bottom: none;
+}
+
+.modal-suggestion:hover {
+  background: var(--background-modifier-hover);
+}
+
+.modal-suggestion.is-selected {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+
+/* Embed Styles */
+.cm-embed {
+  margin: 1em 0;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--background-secondary);
+}
+
+.cm-embed-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5em 1em;
+  background: var(--background-modifier-border);
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.cm-embed-title {
+  font-size: 0.9em;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.cm-embed-link {
+  font-size: 1em;
+  text-decoration: none;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.cm-embed-link:hover {
+  opacity: 1;
+}
+
+.cm-embed-content {
+  padding: 1em;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.cm-embed-text {
+  font-size: 0.95em;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.cm-embed-error {
+  color: var(--text-error);
+  font-style: italic;
+}
+
+.cm-embed-syntax {
+  opacity: 0.3;
+}
+
+/* Block Reference Styles */
+.cm-block-id {
+  display: inline-block;
+  margin-left: 0.5em;
+  padding: 0.1em 0.4em;
+  font-size: 0.85em;
+  font-family: var(--font-monospace);
+  color: var(--text-faint);
+  background: var(--background-modifier-border);
+  border-radius: 3px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s;
+}
+
+.cm-block-id:hover {
+  background: var(--background-modifier-border-hover);
+  color: var(--text-normal);
+}
+
+.cm-block-id-copied {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+
+.cm-block-id-syntax {
+  opacity: 0.3;
+}
+
+.cm-block-ref-link {
+  color: var(--link-color);
+  text-decoration: none;
+  cursor: pointer;
+  border-bottom: 1px solid var(--link-color);
+}
+
+.cm-block-ref-link:hover {
+  color: var(--link-color-hover);
+  border-bottom-color: var(--link-color-hover);
+}
+
+.cm-block-ref-syntax {
+  display: none;
+}
+
+/* Scrollbar Styles */
+.modal-content::-webkit-scrollbar,
+.modal-suggestions::-webkit-scrollbar,
+.cm-embed-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track,
+.modal-suggestions::-webkit-scrollbar-track,
+.cm-embed-content::-webkit-scrollbar-track {
+  background: var(--background-secondary);
+}
+
+.modal-content::-webkit-scrollbar-thumb,
+.modal-suggestions::-webkit-scrollbar-thumb,
+.cm-embed-content::-webkit-scrollbar-thumb {
+  background: var(--background-modifier-border);
+  border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover,
+.modal-suggestions::-webkit-scrollbar-thumb:hover,
+.cm-embed-content::-webkit-scrollbar-thumb:hover {
+  background: var(--background-modifier-border-hover);
+}
+
+/* Dark theme adjustments */
+.theme-dark .notice {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.theme-dark .modal {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* Light theme adjustments */
+.theme-light .notice {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.theme-light .modal {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .notice-container {
+    left: 10px;
+    right: 10px;
+    top: 10px;
+  }
+
+  .notice {
+    min-width: auto;
+    max-width: 100%;
+  }
+
+  .modal {
+    width: 95vw;
+    max-height: 95vh;
+  }
+
+  .modal-title {
+    padding: 16px;
+    font-size: 16px;
+  }
+
+  .modal-content {
+    padding: 16px;
+  }
+}

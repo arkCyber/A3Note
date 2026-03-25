@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { FileText, Trash2, Edit, Copy, FolderPlus } from "lucide-react";
+import { FileText, Trash2, Edit, Copy, FolderPlus, ExternalLink, FolderOpen } from "lucide-react";
 
 export interface ContextMenuItem {
   label: string;
@@ -86,30 +86,57 @@ export default function ContextMenu({ x, y, items, onClose }: ContextMenuProps) 
 export const fileContextMenuItems = (
   onRename: () => void,
   onDelete: () => void,
-  onDuplicate: () => void
-): ContextMenuItem[] => [
-  {
-    label: "Rename",
-    icon: <Edit size={14} />,
-    onClick: onRename,
-  },
-  {
-    label: "Duplicate",
-    icon: <Copy size={14} />,
-    onClick: onDuplicate,
-  },
-  {
-    separator: true,
-    label: "",
-    onClick: () => {},
-  },
-  {
-    label: "Delete",
-    icon: <Trash2 size={14} />,
-    onClick: onDelete,
-    danger: true,
-  },
-];
+  onDuplicate: () => void,
+  onOpenInNewWindow?: () => void,
+  onShowInFileManager?: () => void
+): ContextMenuItem[] => {
+  const items: ContextMenuItem[] = [
+    {
+      label: "Rename",
+      icon: <Edit size={14} />,
+      onClick: onRename,
+    },
+    {
+      label: "Duplicate",
+      icon: <Copy size={14} />,
+      onClick: onDuplicate,
+    },
+  ];
+
+  // Add "Open in New Window" if handler provided
+  if (onOpenInNewWindow) {
+    items.push({
+      label: "Open in New Window",
+      icon: <ExternalLink size={14} />,
+      onClick: onOpenInNewWindow,
+    });
+  }
+
+  // Add "Show in File Manager" if handler provided
+  if (onShowInFileManager) {
+    items.push({
+      label: "Show in File Manager",
+      icon: <FolderOpen size={14} />,
+      onClick: onShowInFileManager,
+    });
+  }
+
+  items.push(
+    {
+      separator: true,
+      label: "",
+      onClick: () => {},
+    },
+    {
+      label: "Delete",
+      icon: <Trash2 size={14} />,
+      onClick: onDelete,
+      danger: true,
+    }
+  );
+
+  return items;
+};
 
 export const folderContextMenuItems = (
   onNewFile: () => void,

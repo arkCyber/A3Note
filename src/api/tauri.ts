@@ -1,5 +1,12 @@
 import { FileItem, FileContent, SearchResult } from "../types";
 
+export interface FileStats {
+  isDirectory: boolean;
+  size: number;
+  mtime: number;
+  ctime?: number;
+}
+
 // Check if running in Tauri environment
 const isTauri = typeof window !== 'undefined' && '__TAURI__' in window;
 
@@ -134,7 +141,6 @@ export const tauriApi = {
   // Open file picker dialog
   async openFileDialog(): Promise<string | null> {
     if (!isTauri || !open) {
-      // Browser mock
       console.log("[Mock] Opening file dialog...");
       return "/demo/README.md";
     }
@@ -154,5 +160,43 @@ export const tauriApi = {
       title: "Open File",
     });
     return result as string | null;
+  },
+
+  async readDir(path: string): Promise<Array<{ name: string; isDirectory: boolean }>> {
+    try {
+      const result = await this.listDirectory(path);
+      return result.map(file => ({
+        name: file.name,
+        isDirectory: file.isDirectory,
+      }));
+    } catch {
+      return [];
+    }
+  },
+
+  async getFileStats(path: string): Promise<{ isDirectory: boolean; size: number; mtime: number }> {
+    try {
+      const result = await this.readFile(path);
+      return {
+        isDirectory: false,
+        size: result.content.length,
+        mtime: Date.now(),
+      };
+    } catch {
+      try {
+        await this.listDirectory(path);
+        return {
+          isDirectory: true,
+          size: 0,
+          mtime: Date.now(),
+        };
+      } catch {
+        throw new Error('File or directory not found');
+      }
+    }
+  },
+
+  async moveToTrash(path: string): Promise<void> {
+    await this.deleteFile(path);
   },
 };

@@ -1,4 +1,4 @@
-import { Menu, FolderOpen, Save, Search, Settings as SettingsIcon, FileText, Loader2, Package } from "lucide-react";
+import { Menu, FolderOpen, Save, Search, Settings as SettingsIcon, FileText, Loader2, Package, Network, Calendar, Command, ChevronLeft, ChevronRight } from "lucide-react";
 import { FileItem } from "../types";
 import ThemeToggle from "./ThemeToggle";
 import { useTranslation } from 'react-i18next';
@@ -14,6 +14,12 @@ interface ToolbarProps {
   onToggleSearch: () => void;
   onOpenSettings: () => void;
   onOpenPluginMarketplace?: () => void;
+  onQuickSwitcher?: () => void;
+  onGraphView?: () => void;
+  onDailyNote?: () => void;
+  onCommandPalette?: () => void;
+  onNavigateBack?: () => void;
+  onNavigateForward?: () => void;
   sidebarOpen: boolean;
   searchOpen: boolean;
 }
@@ -29,6 +35,12 @@ export default function Toolbar({
   onToggleSearch,
   onOpenSettings,
   onOpenPluginMarketplace,
+  onQuickSwitcher,
+  onGraphView,
+  onDailyNote,
+  onCommandPalette,
+  onNavigateBack,
+  onNavigateForward,
   searchOpen,
 }: ToolbarProps) {
   const { t } = useTranslation('toolbar');
@@ -82,6 +94,72 @@ export default function Toolbar({
       >
         <Search size={18} />
       </button>
+
+      {onQuickSwitcher && (
+        <button
+          onClick={onQuickSwitcher}
+          className="p-2 hover:bg-background rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          title="Quick Switcher (Cmd+O)"
+          aria-label="Quick Switcher"
+        >
+          <Search size={18} />
+        </button>
+      )}
+
+      {onGraphView && (
+        <button
+          onClick={onGraphView}
+          className="p-2 hover:bg-background rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          title="Graph View (Cmd+G)"
+          aria-label="Graph View"
+        >
+          <Network size={18} />
+        </button>
+      )}
+
+      {onDailyNote && (
+        <button
+          onClick={onDailyNote}
+          className="p-2 hover:bg-background rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          title="Daily Note (Cmd+D)"
+          aria-label="Daily Note"
+        >
+          <Calendar size={18} />
+        </button>
+      )}
+
+      {onCommandPalette && (
+        <button
+          onClick={onCommandPalette}
+          className="p-2 hover:bg-background rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          title="Command Palette (Cmd+P)"
+          aria-label="Command Palette"
+        >
+          <Command size={18} />
+        </button>
+      )}
+
+      {onNavigateBack && (
+        <button
+          onClick={onNavigateBack}
+          className="p-2 hover:bg-background rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          title="Back (Cmd+Alt+Left)"
+          aria-label="Navigate Back"
+        >
+          <ChevronLeft size={18} />
+        </button>
+      )}
+
+      {onNavigateForward && (
+        <button
+          onClick={onNavigateForward}
+          className="p-2 hover:bg-background rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          title="Forward (Cmd+Alt+Right)"
+          aria-label="Navigate Forward"
+        >
+          <ChevronRight size={18} />
+        </button>
+      )}
 
       <div className="flex-1 text-center text-sm">
         <span className="text-foreground/70">
